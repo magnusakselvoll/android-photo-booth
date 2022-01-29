@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32106.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "android-photo-booth-app", "android-photo-booth-app\android-photo-booth-app.csproj", "{758A8602-2252-429D-81ED-4BFB529BA7A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "android-photo-booth-app.tests", "android-photo-booth-app.tests\android-photo-booth-app.tests.csproj", "{E5B8D4A0-05A0-4627-8313-D5B7F1FDB4DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "android-photo-booth-camera-migrate", "android-photo-booth-camera-migrate\android-photo-booth-camera-migrate.csproj", "{68418525-FE2C-41E4-BD27-16569D07BCB2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3CFEEB6E-5594-4D39-874E-2C8C6A7E1A10}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{758A8602-2252-429D-81ED-4BFB529BA7A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{758A8602-2252-429D-81ED-4BFB529BA7A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{758A8602-2252-429D-81ED-4BFB529BA7A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{758A8602-2252-429D-81ED-4BFB529BA7A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5B8D4A0-05A0-4627-8313-D5B7F1FDB4DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5B8D4A0-05A0-4627-8313-D5B7F1FDB4DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5B8D4A0-05A0-4627-8313-D5B7F1FDB4DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5B8D4A0-05A0-4627-8313-D5B7F1FDB4DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68418525-FE2C-41E4-BD27-16569D07BCB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68418525-FE2C-41E4-BD27-16569D07BCB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68418525-FE2C-41E4-BD27-16569D07BCB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68418525-FE2C-41E4-BD27-16569D07BCB2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4BF60E50-4FB6-4DB9-A80C-55BE92A3AFF0}
+	EndGlobalSection
+EndGlobal

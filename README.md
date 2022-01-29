@@ -1,2 +1,2 @@
-# flashair-photo-booth
-A simple photo booth setup  using a Toshiba FlashAir card (W-03 or above)
+# android-photo-booth
+A simple photo booth setup using an Android phone and adb tools.
