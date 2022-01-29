@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Android_Photo_Booth.Properties;
 using SharpDX.DirectInput;
 
-namespace Android_Photo_Booth
+namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 {
     public sealed class JoystickInfo
     {

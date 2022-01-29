@@ -40,6 +40,7 @@
             this._showFilenames = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this._openCameraButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this._minimumDisplayTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._maximumDisplayTime)).BeginInit();
             this.SuspendLayout();
@@ -47,10 +48,9 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 23);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(12, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(102, 20);
+            this.label1.Size = new System.Drawing.Size(69, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Picture folder";
             // 
@@ -58,19 +58,17 @@
             // 
             this._pictureFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this._pictureFolder.Location = new System.Drawing.Point(210, 18);
-            this._pictureFolder.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this._pictureFolder.Location = new System.Drawing.Point(140, 12);
             this._pictureFolder.Name = "_pictureFolder";
-            this._pictureFolder.Size = new System.Drawing.Size(277, 26);
+            this._pictureFolder.Size = new System.Drawing.Size(186, 20);
             this._pictureFolder.TabIndex = 1;
             // 
             // _browseButton
             // 
             this._browseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._browseButton.Location = new System.Drawing.Point(498, 15);
-            this._browseButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this._browseButton.Location = new System.Drawing.Point(332, 10);
             this._browseButton.Name = "_browseButton";
-            this._browseButton.Size = new System.Drawing.Size(112, 35);
+            this._browseButton.Size = new System.Drawing.Size(75, 23);
             this._browseButton.TabIndex = 2;
             this._browseButton.Text = "Browse";
             this._browseButton.UseVisualStyleBackColor = true;
@@ -79,20 +77,18 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(18, 62);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(12, 40);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(180, 20);
+            this.label2.Size = new System.Drawing.Size(119, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Minimum display time (s)";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(18, 102);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(12, 66);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(184, 20);
+            this.label3.Size = new System.Drawing.Size(122, 13);
             this.label3.TabIndex = 5;
             this.label3.Text = "Maximum display time (s)";
             // 
@@ -101,10 +97,9 @@
             this._startButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this._startButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._startButton.Location = new System.Drawing.Point(210, 188);
-            this._startButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this._startButton.Location = new System.Drawing.Point(207, 126);
             this._startButton.Name = "_startButton";
-            this._startButton.Size = new System.Drawing.Size(279, 75);
+            this._startButton.Size = new System.Drawing.Size(186, 49);
             this._startButton.TabIndex = 9;
             this._startButton.Text = "Start slideshow";
             this._startButton.UseVisualStyleBackColor = true;
@@ -112,25 +107,22 @@
             // 
             // _minimumDisplayTime
             // 
-            this._minimumDisplayTime.Location = new System.Drawing.Point(210, 58);
-            this._minimumDisplayTime.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this._minimumDisplayTime.Location = new System.Drawing.Point(140, 38);
             this._minimumDisplayTime.Name = "_minimumDisplayTime";
-            this._minimumDisplayTime.Size = new System.Drawing.Size(69, 26);
+            this._minimumDisplayTime.Size = new System.Drawing.Size(46, 20);
             this._minimumDisplayTime.TabIndex = 4;
             // 
             // _maximumDisplayTime
             // 
-            this._maximumDisplayTime.Location = new System.Drawing.Point(210, 98);
-            this._maximumDisplayTime.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this._maximumDisplayTime.Location = new System.Drawing.Point(140, 64);
             this._maximumDisplayTime.Name = "_maximumDisplayTime";
-            this._maximumDisplayTime.Size = new System.Drawing.Size(69, 26);
+            this._maximumDisplayTime.Size = new System.Drawing.Size(46, 20);
             this._maximumDisplayTime.TabIndex = 6;
             // 
             // _showFilenames
             // 
             this._showFilenames.AutoSize = true;
-            this._showFilenames.Location = new System.Drawing.Point(210, 140);
-            this._showFilenames.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this._showFilenames.Location = new System.Drawing.Point(140, 91);
             this._showFilenames.Name = "_showFilenames";
             this._showFilenames.Size = new System.Drawing.Size(15, 14);
             this._showFilenames.TabIndex = 8;
@@ -139,28 +131,40 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(18, 140);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Location = new System.Drawing.Point(12, 91);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(121, 20);
+            this.label4.Size = new System.Drawing.Size(81, 13);
             this.label4.TabIndex = 7;
             this.label4.Text = "Show filenames";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(210, 274);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Location = new System.Drawing.Point(140, 178);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(406, 20);
+            this.label5.Size = new System.Drawing.Size(274, 13);
             this.label5.TabIndex = 10;
             this.label5.Text = "Tip: Press the ESC key or ALT+F4 to stop the slideshow.";
             // 
+            // _openCameraButton
+            // 
+            this._openCameraButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._openCameraButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._openCameraButton.Location = new System.Drawing.Point(15, 126);
+            this._openCameraButton.Name = "_openCameraButton";
+            this._openCameraButton.Size = new System.Drawing.Size(186, 49);
+            this._openCameraButton.TabIndex = 11;
+            this._openCameraButton.Text = "Open camera";
+            this._openCameraButton.UseVisualStyleBackColor = true;
+            this._openCameraButton.Click += new System.EventHandler(this._openCameraButton_Click);
+            // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(628, 314);
+            this.ClientSize = new System.Drawing.Size(419, 204);
+            this.Controls.Add(this._openCameraButton);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this._showFilenames);
@@ -172,8 +176,7 @@
             this.Controls.Add(this._browseButton);
             this.Controls.Add(this._pictureFolder);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.MinimumSize = new System.Drawing.Size(644, 353);
+            this.MinimumSize = new System.Drawing.Size(435, 243);
             this.Name = "MainForm";
             this.Text = "Android Photo Booth";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -197,6 +200,7 @@
         private System.Windows.Forms.CheckBox _showFilenames;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button _openCameraButton;
     }
 }
 

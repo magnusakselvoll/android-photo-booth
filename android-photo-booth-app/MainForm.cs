@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using MagnusAkselvoll.AndroidPhotoBooth.App.Properties;
+using MagnusAkselvoll.AndroidPhotoBooth.Camera;
 
 namespace MagnusAkselvoll.AndroidPhotoBooth.App
 {
@@ -42,7 +43,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
         private void StartSlideshow()
         {
             var form = new PictureForm(Settings.Default);
-            form.ShowDialog();
+            form.ShowDialog(this);
         }
 
         private void LoadSettings()
@@ -66,6 +67,12 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             settings.ShowFileNames = _showFilenames.Checked;
 
             settings.Save();
+        }
+
+        private void _openCameraButton_Click(object sender, EventArgs e)
+        {
+            var cameraForm = new CameraForm();
+            cameraForm.Show();
         }
     }
 }

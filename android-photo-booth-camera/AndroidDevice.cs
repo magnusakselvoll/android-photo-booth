@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Android_Photo_Booth
+namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 {
     internal sealed class AndroidDevice
     {

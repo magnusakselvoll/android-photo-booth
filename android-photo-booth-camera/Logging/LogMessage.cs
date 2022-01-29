@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Android_Photo_Booth.Logging
+namespace MagnusAkselvoll.AndroidPhotoBooth.Camera.Logging
 {
     public sealed class LogMessage
     {

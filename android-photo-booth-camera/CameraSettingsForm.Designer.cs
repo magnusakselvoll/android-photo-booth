@@ -1,6 +1,6 @@
-﻿namespace Android_Photo_Booth
+﻿namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 {
-    partial class SettingsForm
+    partial class CameraSettingsForm
     {
         /// <summary>
         /// Required designer variable.
@@ -328,7 +328,7 @@
             // 
             // _cameraTypeBindingSource
             // 
-            this._cameraTypeBindingSource.DataSource = typeof(Android_Photo_Booth.CameraType);
+            this._cameraTypeBindingSource.DataSource = typeof(CameraType);
             // 
             // focusKeepaliveIntervalTextBox
             // 
@@ -501,7 +501,7 @@
             // 
             // _joystickInfoBindingSource
             // 
-            this._joystickInfoBindingSource.DataSource = typeof(Android_Photo_Booth.JoystickInfo);
+            this._joystickInfoBindingSource.DataSource = typeof(JoystickInfo);
             // 
             // _joystickButtonTextbox
             // 

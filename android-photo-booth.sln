@@ -7,13 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "android-photo-booth-app", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "android-photo-booth-app.tests", "android-photo-booth-app.tests\android-photo-booth-app.tests.csproj", "{E5B8D4A0-05A0-4627-8313-D5B7F1FDB4DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "android-photo-booth-camera-migrate", "android-photo-booth-camera-migrate\android-photo-booth-camera-migrate.csproj", "{68418525-FE2C-41E4-BD27-16569D07BCB2}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3CFEEB6E-5594-4D39-874E-2C8C6A7E1A10}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "android-photo-booth-camera", "android-photo-booth-camera\android-photo-booth-camera.csproj", "{68418525-FE2C-41E4-BD27-16569D07BCB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

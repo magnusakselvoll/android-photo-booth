@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Android_Photo_Booth.Logging;
-using Android_Photo_Booth.Properties;
+using MagnusAkselvoll.AndroidPhotoBooth.Camera.Logging;
 using SharpDX.DirectInput;
 
-namespace Android_Photo_Booth
+namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 {
-    public partial class MainForm : Form
+    public partial class CameraForm : Form
     {
         private bool _downloadLoopRunning;
         private bool _focusLoopRunning;
         private int _lastKnownCounter;
         private DateTime _lastCameraAction;
 
-        public MainForm()
+        public CameraForm()
         {
             InitializeComponent();
 
@@ -218,7 +216,7 @@ namespace Android_Photo_Booth
 
         private void OnSettingsButtonClick(object sender, EventArgs e)
         {
-            var settingsForm = new SettingsForm();
+            var settingsForm = new CameraSettingsForm();
             settingsForm.ShowDialog(this);
         }
 

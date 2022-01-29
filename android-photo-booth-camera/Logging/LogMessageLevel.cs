@@ -1,4 +1,4 @@
-﻿namespace Android_Photo_Booth.Logging
+﻿namespace MagnusAkselvoll.AndroidPhotoBooth.Camera.Logging
 {
     public enum LogMessageLevel
     {

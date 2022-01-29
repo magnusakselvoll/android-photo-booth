@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MagnusAkselvoll.AndroidPhotoBooth.App.Properties {
+namespace MagnusAkselvoll.AndroidPhotoBooth.App {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

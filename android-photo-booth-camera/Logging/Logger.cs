@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Android_Photo_Booth.Logging
+namespace MagnusAkselvoll.AndroidPhotoBooth.Camera.Logging
 {
     public static class Logger
     {

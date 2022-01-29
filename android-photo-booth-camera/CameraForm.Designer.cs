@@ -1,6 +1,6 @@
-﻿namespace Android_Photo_Booth
+﻿namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 {
-    partial class MainForm
+    partial class CameraForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CameraForm));
             this.label1 = new System.Windows.Forms.Label();
             this._deviceTextBox = new System.Windows.Forms.TextBox();
             this._detectDeviceButton = new System.Windows.Forms.Button();

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Android_Photo_Booth
+namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 {
     static class Program
     {
@@ -13,7 +13,7 @@ namespace Android_Photo_Booth
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(new CameraForm());
         }
     }
 }

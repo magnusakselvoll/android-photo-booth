@@ -5,10 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Android_Photo_Booth.Logging;
-using Android_Photo_Booth.Properties;
+using MagnusAkselvoll.AndroidPhotoBooth.Camera.Logging;
+using MagnusAkselvoll.AndroidPhotoBooth.Camera.Properties;
 
-namespace Android_Photo_Booth
+namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 {
     internal sealed class AdbController
     {

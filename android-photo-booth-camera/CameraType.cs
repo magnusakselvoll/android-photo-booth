@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Android_Photo_Booth
+namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 {
     public sealed class CameraType
     {

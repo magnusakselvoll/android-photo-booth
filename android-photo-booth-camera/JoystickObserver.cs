@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SharpDX.DirectInput;
 
-namespace Android_Photo_Booth
+namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 {
     internal sealed class JoystickObserver : IDisposable
     {

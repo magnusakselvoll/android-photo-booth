@@ -2,14 +2,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Android_Photo_Booth.Properties;
 using SharpDX.DirectInput;
 
-namespace Android_Photo_Booth
+namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 {
-    public partial class SettingsForm : Form
+    public partial class CameraSettingsForm : Form
     {
-        public SettingsForm()
+        public CameraSettingsForm()
         {
             InitializeComponent();
 

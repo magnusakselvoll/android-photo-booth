@@ -93,5 +93,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\android-photo-booth-camera\android-photo-booth-camera.csproj">
+      <Project>{68418525-fe2c-41e4-bd27-16569d07bcb2}</Project>
+      <Name>android-photo-booth-camera</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

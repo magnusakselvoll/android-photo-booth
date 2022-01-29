@@ -1,4 +1,4 @@
-﻿namespace Android_Photo_Booth.Properties {
+﻿namespace MagnusAkselvoll.AndroidPhotoBooth.Camera {
     
     
     // This class allows you to handle specific events on the settings class:
