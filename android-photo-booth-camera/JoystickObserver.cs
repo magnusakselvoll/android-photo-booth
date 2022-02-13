@@ -22,6 +22,11 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         public void Start()
         {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(nameof(JoystickObserver));
+            }
+
             CancellationTokenSource = new CancellationTokenSource();
 
             ObserverTask = Task.Run(() => PollJoystick(CancellationTokenSource.Token), CancellationTokenSource.Token);

@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Windows.Forms;
-using MagnusAkselvoll.AndroidPhotoBooth.App.Properties;
 using MagnusAkselvoll.AndroidPhotoBooth.Camera;
 
 namespace MagnusAkselvoll.AndroidPhotoBooth.App
 {
     public partial class MainForm : Form
     {
+        private CameraForm _cameraForm;
+
         public MainForm()
         {
             InitializeComponent();
-        }
-
-        private void bindingSource1_CurrentChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -22,7 +18,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             LoadSettings();
         }
 
-        private void _browseButton_Click(object sender, EventArgs e)
+        private void OnBrowseButtonClick(object sender, EventArgs e)
         {
             _folderBrowserDialog.SelectedPath = _pictureFolder.Text;
             var result = _folderBrowserDialog.ShowDialog();
@@ -33,14 +29,14 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             }
         }
 
-        private void _startButton_Click(object sender, EventArgs e)
+        private void OnStartButtonClick(object sender, EventArgs e)
         {
             SaveSettings();
 
-            StartSlideshow();
+            StartSlideShow();
         }
 
-        private void StartSlideshow()
+        private void StartSlideShow()
         {
             var form = new PictureForm(Settings.Default);
             form.ShowDialog(this);
@@ -69,10 +65,22 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             settings.Save();
         }
 
-        private void _openCameraButton_Click(object sender, EventArgs e)
+        private void OnCameraButtonClick(object sender, EventArgs e)
         {
-            var cameraForm = new CameraForm();
-            cameraForm.Show();
+            _openCameraButton.Enabled = false;
+
+            _cameraForm = new CameraForm();
+            _cameraForm.FormClosed += OnCameraFormClosed;
+
+            _cameraForm.Show();
+        }
+
+        private void OnCameraFormClosed(object sender, FormClosedEventArgs e)
+        {
+            _cameraForm?.Dispose();
+            _cameraForm = null;
+
+            _openCameraButton.Enabled = true;
         }
     }
 }

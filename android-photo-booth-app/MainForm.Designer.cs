@@ -72,7 +72,7 @@
             this._browseButton.TabIndex = 2;
             this._browseButton.Text = "Browse";
             this._browseButton.UseVisualStyleBackColor = true;
-            this._browseButton.Click += new System.EventHandler(this._browseButton_Click);
+            this._browseButton.Click += new System.EventHandler(this.OnBrowseButtonClick);
             // 
             // label2
             // 
@@ -103,7 +103,7 @@
             this._startButton.TabIndex = 9;
             this._startButton.Text = "Start slideshow";
             this._startButton.UseVisualStyleBackColor = true;
-            this._startButton.Click += new System.EventHandler(this._startButton_Click);
+            this._startButton.Click += new System.EventHandler(this.OnStartButtonClick);
             // 
             // _minimumDisplayTime
             // 
@@ -157,7 +157,7 @@
             this._openCameraButton.TabIndex = 11;
             this._openCameraButton.Text = "Open camera";
             this._openCameraButton.UseVisualStyleBackColor = true;
-            this._openCameraButton.Click += new System.EventHandler(this._openCameraButton_Click);
+            this._openCameraButton.Click += new System.EventHandler(this.OnCameraButtonClick);
             // 
             // MainForm
             // 

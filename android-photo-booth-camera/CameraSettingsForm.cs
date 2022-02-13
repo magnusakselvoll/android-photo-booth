@@ -26,12 +26,16 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             }
 
             Settings.Default.Save();
+
+            DialogResult = DialogResult.OK;
             Close();
         }
 
         private void OnCancelButtonClicked(object sender, EventArgs e)
         {
             Settings.Default.Reload();
+
+            DialogResult = DialogResult.Cancel;
             Close();
         }
 
@@ -49,6 +53,9 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         private void OnResetButtonClicked(object sender, EventArgs e)
         {
             Settings.Default.Reset();
+
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void OnWorkingBrowseButtonClicked(object sender, EventArgs e)

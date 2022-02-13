@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MagnusAkselvoll.AndroidPhotoBooth.Camera.Logging;
-using MagnusAkselvoll.AndroidPhotoBooth.Camera.Properties;
 
 namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 {
@@ -20,8 +19,22 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         public string AdbBinariesFolder { get; }
         private string AdbExePath => Path.Combine(AdbBinariesFolder, "adb.exe");
 
+        public bool Validate(out string message)
+        {
+            if (!File.Exists(AdbExePath))
+            {
+                message = String.IsNullOrWhiteSpace(AdbBinariesFolder) ? "Missing adb binaries folder. Check settings." : $"File '{AdbExePath}' does not exist. Check settings.";
+                return false;
+            }
+
+            message = null;
+            return true;
+        }
+
         public async Task<(bool connected, AndroidDevice device, string errorMessage)> TryConnectToDeviceAsync()
         {
+            Stopwatch sw = Stopwatch.StartNew();
+
             var outputLines = await ExecuteAdbCommandAsync("devices -l");
 
             foreach (string line in outputLines)
@@ -30,14 +43,23 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                 {
                     if (!device.Authorized)
                     {
-                        return (false, device, $"Device {device.Id} not authorized. Please enable usb debugging and whitelist computer from the device.");
+                        var unauthorizedMessage = $"Device {device.Id} not authorized. Please enable usb debugging and whitelist computer from the device.";
+            
+                        Logger.Log(LogMessageLevel.Debug, unauthorizedMessage, sw.Elapsed);
+
+                        return (false, device, unauthorizedMessage);
                     }
 
+                    Logger.Log(LogMessageLevel.Debug, $"Detected device: {device}", sw.Elapsed);
                     return (true, device, null);
                 }
             }
 
-            return (false, null, "No device found");
+            var noDeviceMessage = "No device found";
+
+            Logger.Log(LogMessageLevel.Debug, noDeviceMessage, sw.Elapsed);
+
+            return (false, null, noDeviceMessage);
         }
 
         public async Task<bool> IsInteractiveAndUnlocked()
