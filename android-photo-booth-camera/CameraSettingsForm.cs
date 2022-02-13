@@ -12,7 +12,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         {
             InitializeComponent();
 
-            _settingsBindingSource.DataSource = Settings.Default;
+            _settingsBindingSource.DataSource = Properties.Settings.Default;
             _cameraTypeBindingSource.DataSource = CameraType.All;
             _joystickComboBox.DataSource = JoystickInfo.All;
         }
@@ -25,7 +25,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                 return;
             }
 
-            Settings.Default.Save();
+            Properties.Settings.Default.Save();
 
             DialogResult = DialogResult.OK;
             Close();
@@ -33,7 +33,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         private void OnCancelButtonClicked(object sender, EventArgs e)
         {
-            Settings.Default.Reload();
+            Properties.Settings.Default.Reload();
 
             DialogResult = DialogResult.Cancel;
             Close();
@@ -52,7 +52,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         private void OnResetButtonClicked(object sender, EventArgs e)
         {
-            Settings.Default.Reset();
+            Properties.Settings.Default.Reset();
 
             DialogResult = DialogResult.OK;
             Close();

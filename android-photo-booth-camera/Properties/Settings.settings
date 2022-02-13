@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Android_Photo_Booth.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MagnusAkselvoll.AndroidPhotoBooth.Camera.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="AdbPath" Type="System.String" Scope="User">
@@ -15,7 +15,7 @@
       <Value Profile="(Default)">00:00:15</Value>
     </Setting>
     <Setting Name="DeviceImageFolder" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">/sdcard/DCIM/Camera/</Value>
     </Setting>
     <Setting Name="DeleteAfterDownload" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -52,6 +52,9 @@
     </Setting>
     <Setting Name="InactivityLockTimeout" Type="System.TimeSpan" Scope="User">
       <Value Profile="(Default)">00:01:00</Value>
+    </Setting>
+    <Setting Name="CountDown" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
     </Setting>
   </Settings>
 </SettingsFile>

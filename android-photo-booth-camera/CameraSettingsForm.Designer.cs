@@ -46,6 +46,7 @@
             System.Windows.Forms.Label label3;
             System.Windows.Forms.Label label4;
             System.Windows.Forms.Label label5;
+            System.Windows.Forms.Label label6;
             this._saveButton = new System.Windows.Forms.Button();
             this._cancelButton = new System.Windows.Forms.Button();
             this._adbBrowseButton = new System.Windows.Forms.Button();
@@ -74,6 +75,7 @@
             this._joystickButtonTextbox = new System.Windows.Forms.TextBox();
             this._detectJoystickButton = new System.Windows.Forms.Button();
             this._inactivityLockTimeoutTextBox = new System.Windows.Forms.TextBox();
+            this.countDownNumeric = new System.Windows.Forms.NumericUpDown();
             adbPathLabel = new System.Windows.Forms.Label();
             cameraAppLabel = new System.Windows.Forms.Label();
             focusKeepaliveIntervalLabel = new System.Windows.Forms.Label();
@@ -91,9 +93,11 @@
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
+            label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this._settingsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._cameraTypeBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._joystickInfoBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.countDownNumeric)).BeginInit();
             this.SuspendLayout();
             // 
             // adbPathLabel
@@ -266,10 +270,20 @@
             label5.TabIndex = 31;
             label5.Text = "Inactivity lock timeout";
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new System.Drawing.Point(12, 412);
+            label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label6.Name = "label6";
+            label6.Size = new System.Drawing.Size(67, 13);
+            label6.TabIndex = 41;
+            label6.Text = "Count down:";
+            // 
             // _saveButton
             // 
             this._saveButton.Location = new System.Drawing.Point(160, 493);
-            this._saveButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._saveButton.Margin = new System.Windows.Forms.Padding(2);
             this._saveButton.Name = "_saveButton";
             this._saveButton.Size = new System.Drawing.Size(50, 23);
             this._saveButton.TabIndex = 38;
@@ -280,7 +294,7 @@
             // _cancelButton
             // 
             this._cancelButton.Location = new System.Drawing.Point(214, 493);
-            this._cancelButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._cancelButton.Margin = new System.Windows.Forms.Padding(2);
             this._cancelButton.Name = "_cancelButton";
             this._cancelButton.Size = new System.Drawing.Size(50, 23);
             this._cancelButton.TabIndex = 39;
@@ -291,7 +305,7 @@
             // _adbBrowseButton
             // 
             this._adbBrowseButton.Location = new System.Drawing.Point(481, 4);
-            this._adbBrowseButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._adbBrowseButton.Margin = new System.Windows.Forms.Padding(2);
             this._adbBrowseButton.Name = "_adbBrowseButton";
             this._adbBrowseButton.Size = new System.Drawing.Size(50, 23);
             this._adbBrowseButton.TabIndex = 2;
@@ -303,7 +317,7 @@
             // 
             this.adbPathTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "AdbPath", true));
             this.adbPathTextBox.Location = new System.Drawing.Point(160, 6);
-            this.adbPathTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.adbPathTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.adbPathTextBox.Name = "adbPathTextBox";
             this.adbPathTextBox.Size = new System.Drawing.Size(317, 20);
             this.adbPathTextBox.TabIndex = 1;
@@ -320,7 +334,7 @@
             this.cameraAppComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cameraAppComboBox.FormattingEnabled = true;
             this.cameraAppComboBox.Location = new System.Drawing.Point(160, 30);
-            this.cameraAppComboBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cameraAppComboBox.Margin = new System.Windows.Forms.Padding(2);
             this.cameraAppComboBox.Name = "cameraAppComboBox";
             this.cameraAppComboBox.Size = new System.Drawing.Size(317, 21);
             this.cameraAppComboBox.TabIndex = 4;
@@ -328,13 +342,13 @@
             // 
             // _cameraTypeBindingSource
             // 
-            this._cameraTypeBindingSource.DataSource = typeof(CameraType);
+            this._cameraTypeBindingSource.DataSource = typeof(MagnusAkselvoll.AndroidPhotoBooth.Camera.CameraType);
             // 
             // focusKeepaliveIntervalTextBox
             // 
             this.focusKeepaliveIntervalTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "FocusKeepaliveInterval", true));
             this.focusKeepaliveIntervalTextBox.Location = new System.Drawing.Point(160, 75);
-            this.focusKeepaliveIntervalTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.focusKeepaliveIntervalTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.focusKeepaliveIntervalTextBox.Name = "focusKeepaliveIntervalTextBox";
             this.focusKeepaliveIntervalTextBox.Size = new System.Drawing.Size(317, 20);
             this.focusKeepaliveIntervalTextBox.TabIndex = 8;
@@ -343,7 +357,7 @@
             // 
             this.pinCodeTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "PinCode", true));
             this.pinCodeTextBox.Location = new System.Drawing.Point(160, 99);
-            this.pinCodeTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pinCodeTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.pinCodeTextBox.Name = "pinCodeTextBox";
             this.pinCodeTextBox.Size = new System.Drawing.Size(317, 20);
             this.pinCodeTextBox.TabIndex = 10;
@@ -354,7 +368,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.deviceImageFolderTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "DeviceImageFolder", true));
             this.deviceImageFolderTextBox.Location = new System.Drawing.Point(161, 143);
-            this.deviceImageFolderTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.deviceImageFolderTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.deviceImageFolderTextBox.Name = "deviceImageFolderTextBox";
             this.deviceImageFolderTextBox.Size = new System.Drawing.Size(317, 20);
             this.deviceImageFolderTextBox.TabIndex = 14;
@@ -363,7 +377,7 @@
             // 
             this.deleteAfterDownloadCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this._settingsBindingSource, "DeleteAfterDownload", true));
             this.deleteAfterDownloadCheckBox.Location = new System.Drawing.Point(161, 123);
-            this.deleteAfterDownloadCheckBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.deleteAfterDownloadCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.deleteAfterDownloadCheckBox.Name = "deleteAfterDownloadCheckBox";
             this.deleteAfterDownloadCheckBox.Size = new System.Drawing.Size(69, 16);
             this.deleteAfterDownloadCheckBox.TabIndex = 12;
@@ -375,7 +389,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.workingFolderTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "WorkingFolder", true));
             this.workingFolderTextBox.Location = new System.Drawing.Point(161, 191);
-            this.workingFolderTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.workingFolderTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.workingFolderTextBox.Name = "workingFolderTextBox";
             this.workingFolderTextBox.Size = new System.Drawing.Size(317, 20);
             this.workingFolderTextBox.TabIndex = 18;
@@ -386,7 +400,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.fileSelectionRegexTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "FileSelectionRegex", true));
             this.fileSelectionRegexTextBox.Location = new System.Drawing.Point(161, 167);
-            this.fileSelectionRegexTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.fileSelectionRegexTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.fileSelectionRegexTextBox.Name = "fileSelectionRegexTextBox";
             this.fileSelectionRegexTextBox.Size = new System.Drawing.Size(317, 20);
             this.fileSelectionRegexTextBox.TabIndex = 16;
@@ -397,7 +411,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.publishFolderTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "PublishFolder", true));
             this.publishFolderTextBox.Location = new System.Drawing.Point(161, 215);
-            this.publishFolderTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.publishFolderTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.publishFolderTextBox.Name = "publishFolderTextBox";
             this.publishFolderTextBox.Size = new System.Drawing.Size(317, 20);
             this.publishFolderTextBox.TabIndex = 21;
@@ -408,7 +422,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.publishFilenamePatternTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "PublishFilenamePattern", true));
             this.publishFilenamePatternTextBox.Location = new System.Drawing.Point(161, 239);
-            this.publishFilenamePatternTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.publishFilenamePatternTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.publishFilenamePatternTextBox.Name = "publishFilenamePatternTextBox";
             this.publishFilenamePatternTextBox.Size = new System.Drawing.Size(317, 20);
             this.publishFilenamePatternTextBox.TabIndex = 24;
@@ -416,7 +430,7 @@
             // _resetButton
             // 
             this._resetButton.Location = new System.Drawing.Point(268, 493);
-            this._resetButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._resetButton.Margin = new System.Windows.Forms.Padding(2);
             this._resetButton.Name = "_resetButton";
             this._resetButton.Size = new System.Drawing.Size(50, 23);
             this._resetButton.TabIndex = 40;
@@ -427,7 +441,7 @@
             // _workingBrowseButton
             // 
             this._workingBrowseButton.Location = new System.Drawing.Point(482, 189);
-            this._workingBrowseButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._workingBrowseButton.Margin = new System.Windows.Forms.Padding(2);
             this._workingBrowseButton.Name = "_workingBrowseButton";
             this._workingBrowseButton.Size = new System.Drawing.Size(50, 23);
             this._workingBrowseButton.TabIndex = 19;
@@ -438,7 +452,7 @@
             // _publishBrowseButton
             // 
             this._publishBrowseButton.Location = new System.Drawing.Point(482, 213);
-            this._publishBrowseButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._publishBrowseButton.Margin = new System.Windows.Forms.Padding(2);
             this._publishBrowseButton.Name = "_publishBrowseButton";
             this._publishBrowseButton.Size = new System.Drawing.Size(50, 23);
             this._publishBrowseButton.TabIndex = 22;
@@ -450,7 +464,7 @@
             // 
             this.downloadImagesIntervalTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "DownloadImagesInterval", true));
             this.downloadImagesIntervalTextBox.Location = new System.Drawing.Point(161, 263);
-            this.downloadImagesIntervalTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.downloadImagesIntervalTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.downloadImagesIntervalTextBox.Name = "downloadImagesIntervalTextBox";
             this.downloadImagesIntervalTextBox.Size = new System.Drawing.Size(317, 20);
             this.downloadImagesIntervalTextBox.TabIndex = 26;
@@ -461,7 +475,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.publishFilesPerFolderTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "PublishFilesPerFolder", true));
             this.publishFilesPerFolderTextBox.Location = new System.Drawing.Point(161, 287);
-            this.publishFilesPerFolderTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.publishFilesPerFolderTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.publishFilesPerFolderTextBox.Name = "publishFilesPerFolderTextBox";
             this.publishFilesPerFolderTextBox.Size = new System.Drawing.Size(317, 20);
             this.publishFilesPerFolderTextBox.TabIndex = 28;
@@ -470,7 +484,7 @@
             // 
             this._useNfcScreenApiCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this._settingsBindingSource, "UseNfcScreenApi", true));
             this._useNfcScreenApiCheckBox.Location = new System.Drawing.Point(160, 55);
-            this._useNfcScreenApiCheckBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._useNfcScreenApiCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this._useNfcScreenApiCheckBox.Name = "_useNfcScreenApiCheckBox";
             this._useNfcScreenApiCheckBox.Size = new System.Drawing.Size(69, 16);
             this._useNfcScreenApiCheckBox.TabIndex = 6;
@@ -480,7 +494,7 @@
             // 
             this._cameraOpenTimeoutCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "CameraOpenTimeout", true));
             this._cameraOpenTimeoutCheckBox.Location = new System.Drawing.Point(161, 311);
-            this._cameraOpenTimeoutCheckBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._cameraOpenTimeoutCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this._cameraOpenTimeoutCheckBox.Name = "_cameraOpenTimeoutCheckBox";
             this._cameraOpenTimeoutCheckBox.Size = new System.Drawing.Size(317, 20);
             this._cameraOpenTimeoutCheckBox.TabIndex = 30;
@@ -493,7 +507,7 @@
             this._joystickComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this._joystickComboBox.FormattingEnabled = true;
             this._joystickComboBox.Location = new System.Drawing.Point(160, 359);
-            this._joystickComboBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._joystickComboBox.Margin = new System.Windows.Forms.Padding(2);
             this._joystickComboBox.Name = "_joystickComboBox";
             this._joystickComboBox.Size = new System.Drawing.Size(317, 21);
             this._joystickComboBox.TabIndex = 34;
@@ -501,13 +515,13 @@
             // 
             // _joystickInfoBindingSource
             // 
-            this._joystickInfoBindingSource.DataSource = typeof(JoystickInfo);
+            this._joystickInfoBindingSource.DataSource = typeof(MagnusAkselvoll.AndroidPhotoBooth.Camera.JoystickInfo);
             // 
             // _joystickButtonTextbox
             // 
             this._joystickButtonTextbox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "JoystickButton", true));
             this._joystickButtonTextbox.Location = new System.Drawing.Point(159, 384);
-            this._joystickButtonTextbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._joystickButtonTextbox.Margin = new System.Windows.Forms.Padding(2);
             this._joystickButtonTextbox.Name = "_joystickButtonTextbox";
             this._joystickButtonTextbox.Size = new System.Drawing.Size(317, 20);
             this._joystickButtonTextbox.TabIndex = 36;
@@ -515,7 +529,7 @@
             // _detectJoystickButton
             // 
             this._detectJoystickButton.Location = new System.Drawing.Point(481, 382);
-            this._detectJoystickButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._detectJoystickButton.Margin = new System.Windows.Forms.Padding(2);
             this._detectJoystickButton.Name = "_detectJoystickButton";
             this._detectJoystickButton.Size = new System.Drawing.Size(50, 23);
             this._detectJoystickButton.TabIndex = 37;
@@ -527,17 +541,27 @@
             // 
             this._inactivityLockTimeoutTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "InactivityLockTimeout", true));
             this._inactivityLockTimeoutTextBox.Location = new System.Drawing.Point(160, 335);
-            this._inactivityLockTimeoutTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._inactivityLockTimeoutTextBox.Margin = new System.Windows.Forms.Padding(2);
             this._inactivityLockTimeoutTextBox.Name = "_inactivityLockTimeoutTextBox";
             this._inactivityLockTimeoutTextBox.Size = new System.Drawing.Size(317, 20);
             this._inactivityLockTimeoutTextBox.TabIndex = 32;
             // 
-            // SettingsForm
+            // countDownNumeric
+            // 
+            this.countDownNumeric.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "CountDown", true));
+            this.countDownNumeric.Location = new System.Drawing.Point(159, 410);
+            this.countDownNumeric.Name = "countDownNumeric";
+            this.countDownNumeric.Size = new System.Drawing.Size(120, 20);
+            this.countDownNumeric.TabIndex = 42;
+            // 
+            // CameraSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.ClientSize = new System.Drawing.Size(543, 628);
+            this.Controls.Add(this.countDownNumeric);
+            this.Controls.Add(label6);
             this.Controls.Add(label5);
             this.Controls.Add(this._inactivityLockTimeoutTextBox);
             this.Controls.Add(this._detectJoystickButton);
@@ -579,13 +603,14 @@
             this.Controls.Add(this._adbBrowseButton);
             this.Controls.Add(this._cancelButton);
             this.Controls.Add(this._saveButton);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.Name = "SettingsForm";
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Name = "CameraSettingsForm";
             this.Text = "Settings";
             this.Load += new System.EventHandler(this.OnSettingsFormLoad);
             ((System.ComponentModel.ISupportInitialize)(this._settingsBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._cameraTypeBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._joystickInfoBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.countDownNumeric)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -620,5 +645,6 @@
         private System.Windows.Forms.TextBox _joystickButtonTextbox;
         private System.Windows.Forms.Button _detectJoystickButton;
         private System.Windows.Forms.TextBox _inactivityLockTimeoutTextBox;
+        private System.Windows.Forms.NumericUpDown countDownNumeric;
     }
 }

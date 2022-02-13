@@ -65,7 +65,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         public async Task<bool> IsInteractiveAndUnlocked()
         {
-            if (Settings.Default.UseNfcScreenApi) return await IsInteractiveAndUnlockedNfcAsync();
+            if (Properties.Settings.Default.UseNfcScreenApi) return await IsInteractiveAndUnlockedNfcAsync();
 
             return await IsInteractiveAsync() && !await IsLockedAsync();
         }
@@ -82,7 +82,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         public async Task<bool> IsInteractiveAsync()
         {
-            if (Settings.Default.UseNfcScreenApi) return await IsInteractiveNfcAsync();
+            if (Properties.Settings.Default.UseNfcScreenApi) return await IsInteractiveNfcAsync();
 
             var sw = Stopwatch.StartNew();
 
@@ -139,7 +139,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         public async Task<bool> IsLockedAsync()
         {
-            if (Settings.Default.UseNfcScreenApi) return await IsLockedNfcAsync();
+            if (Properties.Settings.Default.UseNfcScreenApi) return await IsLockedNfcAsync();
 
             var sw = Stopwatch.StartNew();
 
@@ -245,7 +245,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         {
             var sw = Stopwatch.StartNew();
 
-            await ExecuteAdbCommandAsync($"shell am start -a android.media.action.{Settings.Default.CameraApp}");
+            await ExecuteAdbCommandAsync($"shell am start -a android.media.action.{Properties.Settings.Default.CameraApp}");
 
             Logger.Log(LogMessageLevel.Information, "Camera opened", sw.Elapsed);
         }
@@ -313,7 +313,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
             var publishFilename = GetPublishFilename(counter, filename);
 
-            File.Move(Path.Combine(Settings.Default.WorkingFolder, filename),
+            File.Move(Path.Combine(Properties.Settings.Default.WorkingFolder, filename),
                 Path.Combine(publishFolder, publishFilename));
 
             Logger.Log(LogMessageLevel.Information, $"Published file '{filename}' as '{publishFilename}'");
@@ -324,16 +324,16 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         private string GetPublishFilename(int counter, string originalFilename)
         {
             return
-                $"{string.Format(Settings.Default.PublishFilenamePattern, counter)}{Path.GetExtension(originalFilename)}";
+                $"{string.Format(Properties.Settings.Default.PublishFilenamePattern, counter)}{Path.GetExtension(originalFilename)}";
         }
 
         private string GetPublishFolder(int lastKnownCounter)
         {
-            var lowerLimit = lastKnownCounter / Settings.Default.PublishFilesPerFolder *
-                             Settings.Default.PublishFilesPerFolder;
-            var upperLimit = lowerLimit + Settings.Default.PublishFilesPerFolder - 1;
+            var lowerLimit = lastKnownCounter / Properties.Settings.Default.PublishFilesPerFolder *
+                             Properties.Settings.Default.PublishFilesPerFolder;
+            var upperLimit = lowerLimit + Properties.Settings.Default.PublishFilesPerFolder - 1;
 
-            return Path.Combine(Settings.Default.PublishFolder, $"{lowerLimit}-{upperLimit}");
+            return Path.Combine(Properties.Settings.Default.PublishFolder, $"{lowerLimit}-{upperLimit}");
         }
 
         private async Task DownloadFileAsync(string filename)
@@ -343,7 +343,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             Logger.Log(LogMessageLevel.Debug, $"Downloading file '{fullDevicePath}'");
 
             var outputLines =
-                await ExecuteAdbCommandAsync($"pull {fullDevicePath} {Settings.Default.WorkingFolder}");
+                await ExecuteAdbCommandAsync($"pull {fullDevicePath} {Properties.Settings.Default.WorkingFolder}");
 
             if (outputLines.Count != 1 || !outputLines[0].Contains("pulled"))
                 throw new Exception($"Unable to pull file {filename}. Error: {outputLines.FirstOrDefault()}");
@@ -356,7 +356,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             var fullDevicePath = GetFullDevicePath(filename);
             Logger.Log(LogMessageLevel.Debug, $"Considering deleting file '{fullDevicePath}'");
 
-            if (!Settings.Default.DeleteAfterDownload)
+            if (!Properties.Settings.Default.DeleteAfterDownload)
             {
                 Logger.Log(LogMessageLevel.Debug, "Deletion disabled in settings");
                 return;
@@ -371,7 +371,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         private string GetFullDevicePath(string filename)
         {
-            var folder = Settings.Default.DeviceImageFolder;
+            var folder = Properties.Settings.Default.DeviceImageFolder;
 
             if (!folder.EndsWith("/")) folder = $"{folder}/";
 
@@ -380,14 +380,14 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         private bool ExistsTokenFile(string originalFilename)
         {
-            var tokenFilepath = Path.Combine(Settings.Default.WorkingFolder, $"{originalFilename}.token");
+            var tokenFilepath = Path.Combine(Properties.Settings.Default.WorkingFolder, $"{originalFilename}.token");
 
             return File.Exists(tokenFilepath);
         }
 
         private void CreateTokenFile(string originalFilename)
         {
-            var tokenFilepath = Path.Combine(Settings.Default.WorkingFolder, $"{originalFilename}.token");
+            var tokenFilepath = Path.Combine(Properties.Settings.Default.WorkingFolder, $"{originalFilename}.token");
 
             using (File.Create(tokenFilepath))
             {
@@ -397,7 +397,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         private async Task<List<string>> GetStableFileListAsync()
         {
             Logger.Log(LogMessageLevel.Debug, "Assembling list of stable files on device");
-            var matchRegex = new Regex(Settings.Default.FileSelectionRegex, RegexOptions.IgnoreCase);
+            var matchRegex = new Regex(Properties.Settings.Default.FileSelectionRegex, RegexOptions.IgnoreCase);
 
             var firstListing = await GetFileListAsync();
             await Task.Delay(200);
@@ -446,7 +446,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         private async Task<Dictionary<string, int>> GetFileListAsync()
         {
-            var outputLines = await ExecuteAdbCommandAsync($"shell ls -s {Settings.Default.DeviceImageFolder}");
+            var outputLines = await ExecuteAdbCommandAsync($"shell ls -s {Properties.Settings.Default.DeviceImageFolder}");
 
             var listing = new Dictionary<string, int>();
 

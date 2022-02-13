@@ -47,7 +47,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         {
             get
             {
-                return Settings.Default.Joystick == Guid.Empty ? null : All.FirstOrDefault(joystickInfo => joystickInfo.Id == Settings.Default.Joystick);
+                return Properties.Settings.Default.Joystick == Guid.Empty ? null : All.FirstOrDefault(joystickInfo => joystickInfo.Id == Properties.Settings.Default.Joystick);
             }
         }
     }

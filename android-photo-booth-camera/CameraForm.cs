@@ -113,7 +113,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         {
             if (_adbController != null) return _adbController;
 
-            var adbController = new AdbController(Settings.Default.AdbPath);
+            var adbController = new AdbController(Properties.Settings.Default.AdbPath);
 
             if (!adbController.Validate(out var message))
             {
@@ -195,7 +195,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
             if (await controller.IsLockedAsync())
             {
-                await controller.UnlockAsync(Settings.Default.PinCode);
+                await controller.UnlockAsync(Properties.Settings.Default.PinCode);
 
                 var retries = 0;
                 var isLocked = true;
@@ -238,7 +238,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         {
             try
             {
-                await Task.Delay(Settings.Default.InactivityLockTimeout, cancellationToken);
+                await Task.Delay(Properties.Settings.Default.InactivityLockTimeout, cancellationToken);
 
                 Invoke(new Action(async () => { await EnsureLockedAsync(); }));
             }
@@ -273,11 +273,11 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         {
             if (TryStopFocusLoop()) return;
 
-            if (Settings.Default.FocusKeepaliveInterval < TimeSpan.FromSeconds(1))
+            if (Properties.Settings.Default.FocusKeepaliveInterval < TimeSpan.FromSeconds(1))
                 MessageBox.Show("At least one second focus keepalive interval must be set", "Too short interval",
                     MessageBoxButtons.OK);
 
-            var totalInterval = Settings.Default.FocusKeepaliveInterval.TotalMilliseconds;
+            var totalInterval = Properties.Settings.Default.FocusKeepaliveInterval.TotalMilliseconds;
             var intervalStep = (int)Math.Round(totalInterval /
                                                ((double)(_focusProgressBar.Maximum - _focusProgressBar.Minimum) /
                                                 _focusProgressBar.Step));
@@ -347,7 +347,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         {
             if (_downloadLoopRunning) return false;
 
-            if (Settings.Default.DownloadImagesInterval < TimeSpan.FromSeconds(1))
+            if (Properties.Settings.Default.DownloadImagesInterval < TimeSpan.FromSeconds(1))
             {
                 if (!silent)
                     MessageBox.Show("At least one second focus keepalive interval must be set", "Too short interval",
@@ -356,7 +356,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(Settings.Default.WorkingFolder))
+            if (string.IsNullOrWhiteSpace(Properties.Settings.Default.WorkingFolder))
             {
                 if (!silent)
                     MessageBox.Show("The working folder for downloads must be set", "Missing working folder",
@@ -365,7 +365,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(Settings.Default.PublishFolder))
+            if (string.IsNullOrWhiteSpace(Properties.Settings.Default.PublishFolder))
             {
                 if (!silent)
                     MessageBox.Show("The publish folder for downloads must be set", "Missing publish folder",
@@ -374,7 +374,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                 return false;
             }
 
-            var totalInterval = Settings.Default.DownloadImagesInterval.TotalMilliseconds;
+            var totalInterval = Properties.Settings.Default.DownloadImagesInterval.TotalMilliseconds;
             var intervalStep = (int)Math.Round(totalInterval /
                                                ((double)(_downloadProgressBar.Maximum -
                                                          _downloadProgressBar.Minimum) / _downloadProgressBar.Step));
@@ -439,7 +439,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
                 if (controller == null) return;
 
-                if (_lastCameraAction + Settings.Default.CameraOpenTimeout < DateTime.UtcNow
+                if (_lastCameraAction + Properties.Settings.Default.CameraOpenTimeout < DateTime.UtcNow
                     || !await controller.IsInteractiveAndUnlocked())
                 {
                     await OpenCameraSafely();
@@ -489,7 +489,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                 return false;
             }
 
-            if (string.IsNullOrEmpty(Settings.Default.JoystickButton))
+            if (string.IsNullOrEmpty(Properties.Settings.Default.JoystickButton))
             {
                 if (!silent)
                     MessageBox.Show("Ensure that joystick is connected and enter settings and detect the button",
@@ -498,7 +498,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                 return false;
             }
 
-            if (!Enum.TryParse(Settings.Default.JoystickButton, out _joystickOffset))
+            if (!Enum.TryParse(Properties.Settings.Default.JoystickButton, out _joystickOffset))
             {
                 if (!silent)
                     MessageBox.Show("Ensure that joystick is connected and enter settings and detect the button",

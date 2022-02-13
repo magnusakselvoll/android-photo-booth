@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MagnusAkselvoll.AndroidPhotoBooth.Camera {
+namespace MagnusAkselvoll.AndroidPhotoBooth.Camera.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -73,7 +73,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("/sdcard/DCIM/Camera/")]
         public string DeviceImageFolder {
             get {
                 return ((string)(this["DeviceImageFolder"]));
@@ -224,6 +224,18 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera {
             }
             set {
                 this["InactivityLockTimeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int CountDown {
+            get {
+                return ((int)(this["CountDown"]));
+            }
+            set {
+                this["CountDown"] = value;
             }
         }
     }
