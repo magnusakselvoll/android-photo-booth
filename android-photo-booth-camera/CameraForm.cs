@@ -14,8 +14,9 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         private AdbController _adbController;
         private bool _deviceDetected;
 
-        private bool _downloadLoopRunning;
-        private bool _focusLoopRunning;
+        private readonly SemaphoreSlim _downloadSemaphore = new SemaphoreSlim(1, 1);
+        private DateTime _lastDownloadInitiated = DateTime.MinValue;
+        private CancellationTokenSource _downloadCancellationTokenSource;
 
         private CancellationTokenSource _inactivityLockTokenSource;
 
@@ -46,8 +47,13 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         private void Reset()
         {
             StopJoystick();
-            TryStopDownloadLoop();
-            TryStopFocusLoop();
+
+            if (_downloadCancellationTokenSource != null)
+            {
+                _downloadCancellationTokenSource.Cancel();
+
+                _downloadCancellationTokenSource = null;
+            }
 
             _adbController = null;
             _deviceDetected = false;
@@ -61,11 +67,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
             if (controller == null) return false;
 
-            var joystickStarted = TryStartJoystick(true);
-
-            var downloadStarted = TryStartDownloadLoop(true);
-
-            return joystickStarted && downloadStarted;
+            return TryStartJoystick(true);
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -82,6 +84,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             const int maxLines = 200;
             const int reducedNumberOfLines = 150;
 
+            // ReSharper disable once RedundantAssignment
             var minimumLevel = LogMessageLevel.Information;
 
 #if DEBUG
@@ -154,7 +157,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         private void ShowBadAdbSettingsDialog(string message)
         {
-            MessageBox.Show(message, "Incorrect adb settings", MessageBoxButtons.OK);
+            MessageBox.Show(message, @"Incorrect adb settings", MessageBoxButtons.OK);
         }
 
 
@@ -187,7 +190,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
                 if (!isInteractive)
                 {
-                    MessageBox.Show("Unable to activate device screen", "Device not interactive", MessageBoxButtons.OK);
+                    MessageBox.Show(@"Unable to activate device screen", @"Device not interactive", MessageBoxButtons.OK);
                     return;
                 }
             }
@@ -210,7 +213,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
                 if (isLocked)
                 {
-                    MessageBox.Show("Unable to unlock device. Is the pin code correct?", "Device locked",
+                    MessageBox.Show(@"Unable to unlock device. Is the pin code correct?", @"Device locked",
                         MessageBoxButtons.OK);
                     return;
                 }
@@ -268,36 +271,6 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             }
         }
 
-        private void OnFocusButtonClick(object sender, EventArgs e)
-        {
-            if (TryStopFocusLoop()) return;
-
-            if (Properties.Settings.Default.FocusKeepaliveInterval < TimeSpan.FromSeconds(1))
-                MessageBox.Show("At least one second focus keepalive interval must be set", "Too short interval",
-                    MessageBoxButtons.OK);
-
-            var totalInterval = Properties.Settings.Default.FocusKeepaliveInterval.TotalMilliseconds;
-            var intervalStep = (int)Math.Round(totalInterval /
-                                               ((double)(_focusProgressBar.Maximum - _focusProgressBar.Minimum) /
-                                                _focusProgressBar.Step));
-
-            _focusTimer.Interval = intervalStep;
-            _focusTimer.Start();
-
-            _focusLoopRunning = true;
-        }
-
-        private bool TryStopFocusLoop()
-        {
-            if (!_focusLoopRunning) return false;
-
-            _focusTimer.Stop();
-            _focusProgressBar.Value = _focusProgressBar.Minimum;
-            _focusLoopRunning = false;
-
-            return true;
-        }
-
         private void OnSettingsButtonClick(object sender, EventArgs e)
         {
             var settingsForm = new CameraSettingsForm();
@@ -306,123 +279,44 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             if (result == DialogResult.OK) Reset();
         }
 
-        private async void OnFocusTimerTickAsync(object sender, EventArgs e)
+        private async Task EnsureDownloadAsync(TimeSpan delay, CancellationToken cancellationToken)
         {
-            if (_focusProgressBar.Value >= _focusProgressBar.Maximum)
+            try
             {
-                await WaitInteractiveSemaphoreAsync();
+                var initiateDownload = DateTime.UtcNow + delay;
+
+                if (delay > TimeSpan.Zero)
+                {
+                    await Task.Delay(delay, cancellationToken);
+                }
+
+                await _downloadSemaphore.WaitAsync(cancellationToken);
 
                 try
                 {
-                    var controller = await TryGetController();
+                    if (_lastDownloadInitiated > initiateDownload)
+                    {
+                        //Someone else has downloaded while waiting for semaphore
+                        return;
+                    }
 
-                    if (controller == null) return;
-
-                    await controller.FocusCameraAsync();
-
-                    UpdateLastCameraAction();
-
-                    _focusProgressBar.Value = _focusProgressBar.Minimum;
-
-                    return;
-                }
-                finally
-                {
-                    ReleaseInteractiveSemaphore();
-                }
-            }
-
-            _focusProgressBar.PerformStep();
-        }
-
-        private void OnDownloadButtonClick(object sender, EventArgs e)
-        {
-            if (TryStopDownloadLoop()) return;
-
-            TryStartDownloadLoop();
-        }
-
-        private bool TryStartDownloadLoop(bool silent = false)
-        {
-            if (_downloadLoopRunning) return false;
-
-            if (Properties.Settings.Default.DownloadImagesInterval < TimeSpan.FromSeconds(1))
-            {
-                if (!silent)
-                    MessageBox.Show("At least one second focus keepalive interval must be set", "Too short interval",
-                        MessageBoxButtons.OK);
-
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(Properties.Settings.Default.WorkingFolder))
-            {
-                if (!silent)
-                    MessageBox.Show("The working folder for downloads must be set", "Missing working folder",
-                        MessageBoxButtons.OK);
-
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(Properties.Settings.Default.PublishFolder))
-            {
-                if (!silent)
-                    MessageBox.Show("The publish folder for downloads must be set", "Missing publish folder",
-                        MessageBoxButtons.OK);
-
-                return false;
-            }
-
-            var totalInterval = Properties.Settings.Default.DownloadImagesInterval.TotalMilliseconds;
-            var intervalStep = (int)Math.Round(totalInterval /
-                                               ((double)(_downloadProgressBar.Maximum -
-                                                         _downloadProgressBar.Minimum) / _downloadProgressBar.Step));
-
-            _downloadTimer.Interval = intervalStep;
-            _downloadTimer.Start();
-
-            _downloadLoopRunning = true;
-
-            return true;
-        }
-
-        private bool TryStopDownloadLoop()
-        {
-            if (_downloadLoopRunning)
-            {
-                _downloadTimer.Stop();
-                _downloadProgressBar.Value = _downloadProgressBar.Minimum;
-                _downloadLoopRunning = false;
-                return true;
-            }
-
-            return false;
-        }
-
-        private async void OnDownloadTimerTickAsync(object sender, EventArgs e)
-        {
-            if (_downloadProgressBar.Value >= _downloadProgressBar.Maximum)
-            {
-                try
-                {
-                    _downloadTimer.Stop();
+                    _lastDownloadInitiated = DateTime.UtcNow;
 
                     var controller = await TryGetController();
 
                     if (controller == null) return;
 
                     _lastKnownCounter = await controller.DownloadFilesAsync(_lastKnownCounter);
+
                 }
                 finally
                 {
-                    _downloadProgressBar.Value = _downloadProgressBar.Minimum;
-                    _downloadTimer.Start();
+                    _downloadSemaphore.Release();
                 }
-
-                return;
             }
-
-            _downloadProgressBar.PerformStep();
+            catch (OperationCanceledException)
+            {
+            }
         }
 
         private async void OnTakeSinglePhotoButtonClickedAsync(object sender, EventArgs e)
@@ -465,6 +359,20 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
                 UpdateLastCameraAction();
 
+                if (_downloadCancellationTokenSource == null)
+                {
+                    _downloadCancellationTokenSource = new CancellationTokenSource();
+                }
+
+                
+#pragma warning disable CS4014
+                //Not waiting for tasks to complete. Relying on cancellation tokens.
+                //Subsequent tasks added in case device is slow.
+                EnsureDownloadAsync(TimeSpan.FromSeconds(2), _downloadCancellationTokenSource.Token); 
+                EnsureDownloadAsync(TimeSpan.FromSeconds(10), _downloadCancellationTokenSource.Token);
+                EnsureDownloadAsync(TimeSpan.FromSeconds(30), _downloadCancellationTokenSource.Token);
+#pragma warning restore CS4014
+
                 _takeSinglePhotoButton.Enabled = true;
 
                 Logger.Log(LogMessageLevel.Information, "Photo taken", sw.Elapsed);
@@ -502,7 +410,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             if (joystickInfo == null)
             {
                 if (!silent)
-                    MessageBox.Show("Ensure that joystick is connected and enter settings", "No joystick configured",
+                    MessageBox.Show(@"Ensure that joystick is connected and enter settings", @"No joystick configured",
                         MessageBoxButtons.OK);
 
                 return false;
@@ -511,8 +419,8 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             if (string.IsNullOrEmpty(Properties.Settings.Default.JoystickButton))
             {
                 if (!silent)
-                    MessageBox.Show("Ensure that joystick is connected and enter settings and detect the button",
-                        "No joystick button configured",
+                    MessageBox.Show(@"Ensure that joystick is connected and enter settings and detect the button",
+                        @"No joystick button configured",
                         MessageBoxButtons.OK);
                 return false;
             }
@@ -520,8 +428,8 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             if (!Enum.TryParse(Properties.Settings.Default.JoystickButton, out _joystickOffset))
             {
                 if (!silent)
-                    MessageBox.Show("Ensure that joystick is connected and enter settings and detect the button",
-                        "Incorrect joystick button configured",
+                    MessageBox.Show(@"Ensure that joystick is connected and enter settings and detect the button",
+                        @"Incorrect joystick button configured",
                         MessageBoxButtons.OK);
 
                 return false;

@@ -28,13 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CameraForm));
             this.label1 = new System.Windows.Forms.Label();
             this._deviceTextBox = new System.Windows.Forms.TextBox();
             this._detectDeviceButton = new System.Windows.Forms.Button();
             this._openCameraButton = new System.Windows.Forms.Button();
-            this._focusButton = new System.Windows.Forms.Button();
             this._toolStrip = new System.Windows.Forms.ToolStrip();
             this._settingsButton = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -42,11 +40,6 @@
             this._startJoystickButton = new System.Windows.Forms.Button();
             this._takeSinglePhotoButton = new System.Windows.Forms.Button();
             this._logTextBox = new System.Windows.Forms.TextBox();
-            this._downloadProgressBar = new System.Windows.Forms.ProgressBar();
-            this._downloadButton = new System.Windows.Forms.Button();
-            this._focusProgressBar = new System.Windows.Forms.ProgressBar();
-            this._focusTimer = new System.Windows.Forms.Timer(this.components);
-            this._downloadTimer = new System.Windows.Forms.Timer(this.components);
             this._toolStrip.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -91,16 +84,6 @@
             this._openCameraButton.UseVisualStyleBackColor = true;
             this._openCameraButton.Click += new System.EventHandler(this.OnOpenCameraButtonClickAsync);
             // 
-            // _focusButton
-            // 
-            this._focusButton.Location = new System.Drawing.Point(90, 83);
-            this._focusButton.Name = "_focusButton";
-            this._focusButton.Size = new System.Drawing.Size(91, 23);
-            this._focusButton.TabIndex = 9;
-            this._focusButton.Text = "Focus loop";
-            this._focusButton.UseVisualStyleBackColor = true;
-            this._focusButton.Click += new System.EventHandler(this.OnFocusButtonClick);
-            // 
             // _toolStrip
             // 
             this._toolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -127,12 +110,8 @@
             this.panel1.Controls.Add(this._startJoystickButton);
             this.panel1.Controls.Add(this._takeSinglePhotoButton);
             this.panel1.Controls.Add(this._logTextBox);
-            this.panel1.Controls.Add(this._downloadProgressBar);
-            this.panel1.Controls.Add(this._downloadButton);
-            this.panel1.Controls.Add(this._focusProgressBar);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this._deviceTextBox);
-            this.panel1.Controls.Add(this._focusButton);
             this.panel1.Controls.Add(this._detectDeviceButton);
             this.panel1.Controls.Add(this._openCameraButton);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -178,61 +157,23 @@
             this._logTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this._logTextBox.Location = new System.Drawing.Point(90, 250);
+            this._logTextBox.Location = new System.Drawing.Point(90, 81);
             this._logTextBox.Margin = new System.Windows.Forms.Padding(2);
             this._logTextBox.Multiline = true;
             this._logTextBox.Name = "_logTextBox";
             this._logTextBox.ReadOnly = true;
             this._logTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this._logTextBox.Size = new System.Drawing.Size(543, 169);
+            this._logTextBox.Size = new System.Drawing.Size(543, 338);
             this._logTextBox.TabIndex = 13;
             // 
-            // _downloadProgressBar
-            // 
-            this._downloadProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._downloadProgressBar.Location = new System.Drawing.Point(185, 112);
-            this._downloadProgressBar.Margin = new System.Windows.Forms.Padding(2);
-            this._downloadProgressBar.Name = "_downloadProgressBar";
-            this._downloadProgressBar.Size = new System.Drawing.Size(446, 23);
-            this._downloadProgressBar.TabIndex = 12;
-            // 
-            // _downloadButton
-            // 
-            this._downloadButton.Location = new System.Drawing.Point(90, 112);
-            this._downloadButton.Name = "_downloadButton";
-            this._downloadButton.Size = new System.Drawing.Size(91, 23);
-            this._downloadButton.TabIndex = 11;
-            this._downloadButton.Text = "Download loop";
-            this._downloadButton.UseVisualStyleBackColor = true;
-            this._downloadButton.Click += new System.EventHandler(this.OnDownloadButtonClick);
-            // 
-            // _focusProgressBar
-            // 
-            this._focusProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._focusProgressBar.Location = new System.Drawing.Point(185, 83);
-            this._focusProgressBar.Margin = new System.Windows.Forms.Padding(2);
-            this._focusProgressBar.Name = "_focusProgressBar";
-            this._focusProgressBar.Size = new System.Drawing.Size(446, 23);
-            this._focusProgressBar.TabIndex = 10;
-            // 
-            // _focusTimer
-            // 
-            this._focusTimer.Tick += new System.EventHandler(this.OnFocusTimerTickAsync);
-            // 
-            // _downloadTimer
-            // 
-            this._downloadTimer.Tick += new System.EventHandler(this.OnDownloadTimerTickAsync);
-            // 
-            // MainForm
+            // CameraForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(720, 450);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this._toolStrip);
-            this.Name = "MainForm";
+            this.Name = "CameraForm";
             this.Text = "Android Photo Booth";
             this._toolStrip.ResumeLayout(false);
             this._toolStrip.PerformLayout();
@@ -249,15 +190,9 @@
         private System.Windows.Forms.TextBox _deviceTextBox;
         private System.Windows.Forms.Button _detectDeviceButton;
         private System.Windows.Forms.Button _openCameraButton;
-        private System.Windows.Forms.Button _focusButton;
         private System.Windows.Forms.ToolStrip _toolStrip;
         private System.Windows.Forms.ToolStripButton _settingsButton;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.ProgressBar _focusProgressBar;
-        private System.Windows.Forms.Timer _focusTimer;
-        private System.Windows.Forms.ProgressBar _downloadProgressBar;
-        private System.Windows.Forms.Button _downloadButton;
-        private System.Windows.Forms.Timer _downloadTimer;
         private System.Windows.Forms.TextBox _logTextBox;
         private System.Windows.Forms.Button _takeSinglePhotoButton;
         private System.Windows.Forms.Button _stopJoystickButton;

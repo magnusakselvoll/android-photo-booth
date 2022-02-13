@@ -21,7 +21,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         {
             if (!ValidateChildren(ValidationConstraints.Enabled))
             {
-                MessageBox.Show("Invalid settings - please review", "Invalid settings", MessageBoxButtons.OK);
+                MessageBox.Show(@"Invalid settings - please review", @"Invalid settings", MessageBoxButtons.OK);
                 return;
             }
 
@@ -78,7 +78,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
             if (joystickInfo == null)
             {
-                MessageBox.Show("Please select a joystick and try again", "No joystick selected", MessageBoxButtons.OK);
+                MessageBox.Show(@"Please select a joystick and try again", @"No joystick selected", MessageBoxButtons.OK);
                 return;
             }
 
@@ -113,7 +113,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                     }
                     else
                     {
-                        MessageBox.Show("Press the detect button again and press the desired joystick button", "No button deteced",  MessageBoxButtons.OK);
+                        MessageBox.Show(@"Press the detect button again and press the desired joystick button", @"No button deteced",  MessageBoxButtons.OK);
                     }
                 }
             }
