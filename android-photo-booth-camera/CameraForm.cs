@@ -380,7 +380,9 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 #pragma warning disable CS4014
                 //Not waiting for tasks to complete. Relying on cancellation tokens.
                 //Subsequent tasks added in case device is slow.
-                EnsureDownloadAsync(TimeSpan.FromSeconds(2), _downloadCancellationTokenSource.Token);
+                EnsureDownloadAsync(TimeSpan.FromMilliseconds(1500), _downloadCancellationTokenSource.Token);
+                EnsureDownloadAsync(TimeSpan.FromMilliseconds(2000), _downloadCancellationTokenSource.Token);
+                EnsureDownloadAsync(TimeSpan.FromMilliseconds(4000), _downloadCancellationTokenSource.Token);
                 EnsureDownloadAsync(TimeSpan.FromSeconds(10), _downloadCancellationTokenSource.Token);
                 EnsureDownloadAsync(TimeSpan.FromSeconds(30), _downloadCancellationTokenSource.Token);
 #pragma warning restore CS4014

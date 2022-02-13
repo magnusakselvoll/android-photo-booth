@@ -16,6 +16,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
         public Settings Settings { get; }
         private Task Task { get; set; }
         private string _fileName;
+        private bool _hideCountdownOnNextImage = false;
 
         private CancellationTokenSource CancellationTokenSource { get; set; }
 
@@ -47,6 +48,15 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             {
                 _pictureBox.Image = ie.Image;
                 _fileName = Path.GetFileNameWithoutExtension(ie.FileName);
+                if (_hideCountdownOnNextImage)
+                {
+                    _hideCountdownOnNextImage = false;
+
+                    Invoke(new Action(() =>
+                    {
+                        _countdownLabel.Visible = false;
+                    }));
+                }
             };
             _slideshowControl.UnhandledExceptionThrown += SlideshowControlCrashed;
 
@@ -145,13 +155,21 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 
         public void CountdownChanged(int secondsRemaining)
         {
-            _countdownLabel.Text = secondsRemaining.ToString();
+            _countdownLabel.Text = secondsRemaining > 1 ? secondsRemaining.ToString() : "😎";
             _countdownLabel.Visible = true;
+            if (_slideshowControl != null)
+            {
+                _slideshowControl.Pause = true;
+            }
         }
 
         public void CountdownTerminated()
         {
-            _countdownLabel.Visible = false;
+            _hideCountdownOnNextImage = true;
+            if (_slideshowControl != null)
+            {
+                _slideshowControl.Pause = false;
+            }
         }
     }
 }

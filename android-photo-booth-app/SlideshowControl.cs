@@ -38,6 +38,8 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             _extensions = GetExtensionsHashset();
         }
 
+        public bool Pause { get; set; }
+
         private void Interrupt(InterruptReason reason)
         {
             if (InternalCancellationTokenSource == null)
@@ -111,6 +113,12 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 
                 while (true)
                 {
+                    if (Pause)
+                    {
+                        Task.Delay(100, cancellationToken);
+                        continue;
+                    }
+
 
                     FileInfo fileInfo;
                     bool newFile = false;
