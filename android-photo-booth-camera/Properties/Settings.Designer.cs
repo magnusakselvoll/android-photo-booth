@@ -230,12 +230,12 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int CountDown {
+        public int Countdown {
             get {
-                return ((int)(this["CountDown"]));
+                return ((int)(this["Countdown"]));
             }
             set {
-                this["CountDown"] = value;
+                this["Countdown"] = value;
             }
         }
     }

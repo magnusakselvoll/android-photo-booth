@@ -23,6 +23,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         private JoystickOffset _joystickOffset;
         private DateTime _lastCameraAction;
         private int _lastKnownCounter;
+        private TimeSpan _lastKnownTimeToTakeSinglePhoto = TimeSpan.FromSeconds(1);
 
 
         public CameraForm()
@@ -435,6 +436,10 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                 var sw = Stopwatch.StartNew();
                 _takeSinglePhotoButton.Enabled = false;
 
+                var countdown = new Countdown(Properties.Settings.Default.Countdown);
+                countdown.OnCountdownTick += OnCountdownTick;
+                countdown.Start();
+
                 var controller = await TryGetController();
 
                 if (controller == null) return;
@@ -447,7 +452,18 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                     await Task.Delay(1000);
                 }
 
-                await controller.TakeSinglePhotoAsync();
+                
+                TimeSpan timeToWait = countdown.TimeRemaining - _lastKnownTimeToTakeSinglePhoto;
+
+                if (timeToWait > TimeSpan.Zero)
+                {
+
+                    Logger.Log(LogMessageLevel.Debug, $"Last photo took {(int) _lastKnownTimeToTakeSinglePhoto.TotalMilliseconds}ms. Waiting {(int) timeToWait.TotalMilliseconds}ms for countdown to finish");
+                    await Task.Delay(timeToWait);
+                }
+
+
+                _lastKnownTimeToTakeSinglePhoto = await controller.TakeSinglePhotoAsync();
 
                 UpdateLastCameraAction();
 
@@ -459,6 +475,11 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             {
                 ReleaseInteractiveSemaphore();
             }
+        }
+
+        private void OnCountdownTick(object sender, int secondsRemaining)
+        {
+            Invoke(new Action(() => { Logger.Log(LogMessageLevel.Information, $"Countdown: {secondsRemaining}"); }));
         }
 
         private void ReleaseInteractiveSemaphore()

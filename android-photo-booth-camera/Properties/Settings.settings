@@ -53,7 +53,7 @@
     <Setting Name="InactivityLockTimeout" Type="System.TimeSpan" Scope="User">
       <Value Profile="(Default)">00:01:00</Value>
     </Setting>
-    <Setting Name="CountDown" Type="System.Int32" Scope="User">
+    <Setting Name="Countdown" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
   </Settings>

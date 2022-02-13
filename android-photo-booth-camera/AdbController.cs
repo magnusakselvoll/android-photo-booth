@@ -464,13 +464,15 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             return listing;
         }
 
-        public async Task TakeSinglePhotoAsync()
+        public async Task<TimeSpan> TakeSinglePhotoAsync()
         {
             var sw = Stopwatch.StartNew();
 
             await ExecuteAdbCommandAsync("shell input keyevent KEYCODE_VOLUME_UP");
 
             Logger.Log(LogMessageLevel.Debug, "Photo taken", sw.Elapsed);
+
+            return sw.Elapsed;
         }
     }
 }
