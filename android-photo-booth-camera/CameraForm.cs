@@ -10,12 +10,10 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 {
     public partial class CameraForm : Form
     {
+        private readonly SemaphoreSlim _downloadSemaphore = new SemaphoreSlim(1, 1);
         private readonly SemaphoreSlim _interactiveCameraActionsSemaphore = new SemaphoreSlim(1, 1);
         private AdbController _adbController;
         private bool _deviceDetected;
-
-        private readonly SemaphoreSlim _downloadSemaphore = new SemaphoreSlim(1, 1);
-        private DateTime _lastDownloadInitiated = DateTime.MinValue;
         private CancellationTokenSource _downloadCancellationTokenSource;
 
         private CancellationTokenSource _inactivityLockTokenSource;
@@ -23,6 +21,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         private JoystickObserver _joystickObserver;
         private JoystickOffset _joystickOffset;
         private DateTime _lastCameraAction;
+        private DateTime _lastDownloadInitiated = DateTime.MinValue;
         private int _lastKnownCounter;
 
         public CameraForm()
@@ -44,19 +43,31 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                     : "Auto start incomplete - check settings and start services manually.");
         }
 
-        private void Reset()
+        private async Task ResetAsync()
         {
             StopJoystick();
 
-            if (_downloadCancellationTokenSource != null)
-            {
-                _downloadCancellationTokenSource.Cancel();
-
-                _downloadCancellationTokenSource = null;
-            }
+            await CancelDownloadTasksAsync();
 
             _adbController = null;
             _deviceDetected = false;
+        }
+
+        private async Task CancelDownloadTasksAsync()
+        {
+            if (_downloadCancellationTokenSource != null)
+            {
+                //Trying to reasonably ensure that no tasks are currently downloading
+                var gotSemaphore = await _downloadSemaphore.WaitAsync(TimeSpan.FromSeconds(30));
+                
+                _downloadCancellationTokenSource.Cancel();
+                _downloadCancellationTokenSource = null;
+
+                if (gotSemaphore)
+                {
+                    _downloadSemaphore.Release();
+                }
+            }
         }
 
         private async Task<bool> TryFullAutoStart()
@@ -70,11 +81,11 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             return TryStartJoystick(true);
         }
 
-        protected override void OnFormClosing(FormClosingEventArgs e)
+        protected override async void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
 
-            Reset();
+            await ResetAsync();
 
             Logger.MessageLogged -= OnMessageLogged;
         }
@@ -190,7 +201,8 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
                 if (!isInteractive)
                 {
-                    MessageBox.Show(@"Unable to activate device screen", @"Device not interactive", MessageBoxButtons.OK);
+                    MessageBox.Show(@"Unable to activate device screen", @"Device not interactive",
+                        MessageBoxButtons.OK);
                     return;
                 }
             }
@@ -271,12 +283,15 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             }
         }
 
-        private void OnSettingsButtonClick(object sender, EventArgs e)
+        private async void OnSettingsButtonClick(object sender, EventArgs e)
         {
             var settingsForm = new CameraSettingsForm();
             var result = settingsForm.ShowDialog(this);
 
-            if (result == DialogResult.OK) Reset();
+            if (result == DialogResult.OK)
+            {
+                await ResetAsync();
+            }
         }
 
         private async Task EnsureDownloadAsync(TimeSpan delay, CancellationToken cancellationToken)
@@ -285,20 +300,15 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             {
                 var initiateDownload = DateTime.UtcNow + delay;
 
-                if (delay > TimeSpan.Zero)
-                {
-                    await Task.Delay(delay, cancellationToken);
-                }
+                if (delay > TimeSpan.Zero) await Task.Delay(delay, cancellationToken);
 
                 await _downloadSemaphore.WaitAsync(cancellationToken);
 
                 try
                 {
                     if (_lastDownloadInitiated > initiateDownload)
-                    {
                         //Someone else has downloaded while waiting for semaphore
                         return;
-                    }
 
                     _lastDownloadInitiated = DateTime.UtcNow;
 
@@ -307,7 +317,6 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                     if (controller == null) return;
 
                     _lastKnownCounter = await controller.DownloadFilesAsync(_lastKnownCounter);
-
                 }
                 finally
                 {
@@ -344,13 +353,14 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                     await Task.Delay(1000);
                 }
 
-                
-                TimeSpan timeToWait = countdown.TimeRemaining - TimeSpan.FromMilliseconds(Properties.Settings.Default.AdjustmentCountdownMS);
+
+                var timeToWait = countdown.TimeRemaining -
+                                 TimeSpan.FromMilliseconds(Properties.Settings.Default.AdjustmentCountdownMS);
 
                 if (timeToWait > TimeSpan.Zero)
                 {
-
-                    Logger.Log(LogMessageLevel.Debug, $"Waiting {(int) timeToWait.TotalMilliseconds}ms for countdown to finish ({Properties.Settings.Default.AdjustmentCountdownMS}ms adjustment)");
+                    Logger.Log(LogMessageLevel.Debug,
+                        $"Waiting {(int)timeToWait.TotalMilliseconds}ms for countdown to finish ({Properties.Settings.Default.AdjustmentCountdownMS}ms adjustment)");
                     await Task.Delay(timeToWait);
                 }
 
@@ -360,15 +370,13 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                 UpdateLastCameraAction();
 
                 if (_downloadCancellationTokenSource == null)
-                {
                     _downloadCancellationTokenSource = new CancellationTokenSource();
-                }
 
-                
+
 #pragma warning disable CS4014
                 //Not waiting for tasks to complete. Relying on cancellation tokens.
                 //Subsequent tasks added in case device is slow.
-                EnsureDownloadAsync(TimeSpan.FromSeconds(2), _downloadCancellationTokenSource.Token); 
+                EnsureDownloadAsync(TimeSpan.FromSeconds(2), _downloadCancellationTokenSource.Token);
                 EnsureDownloadAsync(TimeSpan.FromSeconds(10), _downloadCancellationTokenSource.Token);
                 EnsureDownloadAsync(TimeSpan.FromSeconds(30), _downloadCancellationTokenSource.Token);
 #pragma warning restore CS4014
