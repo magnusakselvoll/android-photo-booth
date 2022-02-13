@@ -5,7 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using MagnusAkselvoll.AndroidPhotoBooth.App.Properties;
+using System.Threading.Tasks;
 
 namespace MagnusAkselvoll.AndroidPhotoBooth.App
 {
@@ -141,34 +141,44 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
                     else
                     {
                         newFile = _newFiles.Count > 0;
-                        fileInfo = newFile ? _newFiles.Dequeue() : GetRandomFile(_files);
-                        history.Enqueue(fileInfo);
-                    }
+                        fileInfo = newFile ? _newFiles.Dequeue() : TryGetRandomFile(_files);
 
-                    Image image;
-                    try
-                    {
-                        image = ReadImage(fileInfo);
-                    }
-                    catch (Exception e)
-                    {
-                        using (EventLog eventLog = new EventLog("Application"))
+                        if (fileInfo != null)
                         {
-                            eventLog.Source = "Application";
-                            eventLog.WriteEntry(
-                                $"flashair -slideshow: Unable to parse file '{fileInfo.FullName}' as image. Exception: {e}",
-                                EventLogEntryType.Warning);
+                            history.Enqueue(fileInfo);
                         }
+                    }
 
-                        image = null; //Continuing to next image
+                    Image image = null;
+
+                    if (fileInfo != null)
+                    {
+                        try
+                        {
+                            image = ReadImage(fileInfo);
+                        }
+                        catch (Exception e)
+                        {
+                            using (EventLog eventLog = new EventLog("Application"))
+                            {
+                                eventLog.Source = "Application";
+                                eventLog.WriteEntry(
+                                    $"flashair -slideshow: Unable to parse file '{fileInfo.FullName}' as image. Exception: {e}",
+                                    EventLogEntryType.Warning);
+                            }
+
+                            image = null; //Continuing to next image
+                        }
                     }
 
                     if (image == null)
                     {
+                        Task.Delay(100, cancellationToken);
+
                         RefreshFiles(true);
                         continue;
                     }
-
+                    
                     DateTime imageDisplayed = DateTime.Now;
                     FireImageChosen(image, fileInfo.Name);
 
@@ -361,7 +371,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             return rotateFlipType;
         }
 
-        private FileInfo GetRandomFile(IList<FileInfo> files)
+        private FileInfo TryGetRandomFile(IList<FileInfo> files)
         {
             if (files == null)
             {
@@ -369,7 +379,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             }
             if (files.Count == 0)
             {
-                throw new ArgumentException(@"At least one file required", nameof(files));
+                return null;
             }
 
             return files[_random.Next(files.Count - 1)];
