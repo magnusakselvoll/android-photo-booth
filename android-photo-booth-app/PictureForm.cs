@@ -156,6 +156,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
         public void CountdownChanged(int secondsRemaining)
         {
             _countdownLabel.Text = secondsRemaining > 1 ? secondsRemaining.ToString() : "😎";
+            _countdownLabel.ForeColor = Color.OrangeRed;
             _countdownLabel.Visible = true;
             if (_slideshowControl != null)
             {
@@ -165,6 +166,8 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 
         public void CountdownTerminated()
         {
+            _countdownLabel.ForeColor = Color.DarkTurquoise;
+
             _hideCountdownOnNextImage = true;
             if (_slideshowControl != null)
             {
