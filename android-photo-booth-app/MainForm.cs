@@ -77,8 +77,13 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 
         private void OnCameraFormClosed(object sender, FormClosedEventArgs e)
         {
-            _cameraForm?.Dispose();
-            _cameraForm = null;
+            if (_cameraForm != null)
+            {
+                _cameraForm.FormClosed -= OnCameraFormClosed;
+                _cameraForm.Dispose();
+
+                _cameraForm = null;
+            }
 
             _openCameraButton.Enabled = true;
         }

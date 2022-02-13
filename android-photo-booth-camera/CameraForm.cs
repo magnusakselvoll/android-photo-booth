@@ -62,6 +62,8 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             base.OnFormClosing(e);
 
             Reset();
+
+            Logger.MessageLogged -= OnMessageLogged;
         }
 
         private void OnMessageLogged(object sender, LogMessage message)
@@ -526,8 +528,13 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         {
             _stopJoystickButton.Enabled = false;
 
-            _joystickObserver?.Dispose();
-            _joystickObserver = null;
+            if (_joystickObserver != null)
+            {
+                _joystickObserver.OnJoystickUpdate -= OnJoystickUpdated;
+                _joystickObserver.Dispose();
+
+                _joystickObserver = null;
+            }
 
             _startJoystickButton.Enabled = true;
         }
