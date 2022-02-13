@@ -23,7 +23,9 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         {
             if (!File.Exists(AdbExePath))
             {
-                message = String.IsNullOrWhiteSpace(AdbBinariesFolder) ? "Missing adb binaries folder. Check settings." : $"File '{AdbExePath}' does not exist. Check settings.";
+                message = string.IsNullOrWhiteSpace(AdbBinariesFolder)
+                    ? "Missing adb binaries folder. Check settings."
+                    : $"File '{AdbExePath}' does not exist. Check settings.";
                 return false;
             }
 
@@ -33,18 +35,18 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         public async Task<(bool connected, AndroidDevice device, string errorMessage)> TryConnectToDeviceAsync()
         {
-            Stopwatch sw = Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();
 
             var outputLines = await ExecuteAdbCommandAsync("devices -l");
 
-            foreach (string line in outputLines)
-            {
-                if (AndroidDevice.TryParse(line, out AndroidDevice device))
+            foreach (var line in outputLines)
+                if (AndroidDevice.TryParse(line, out var device))
                 {
                     if (!device.Authorized)
                     {
-                        var unauthorizedMessage = $"Device {device.Id} not authorized. Please enable usb debugging and whitelist computer from the device.";
-            
+                        var unauthorizedMessage =
+                            $"Device {device.Id} not authorized. Please enable usb debugging and whitelist computer from the device.";
+
                         Logger.Log(LogMessageLevel.Debug, unauthorizedMessage, sw.Elapsed);
 
                         return (false, device, unauthorizedMessage);
@@ -53,7 +55,6 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                     Logger.Log(LogMessageLevel.Debug, $"Detected device: {device}", sw.Elapsed);
                     return (true, device, null);
                 }
-            }
 
             var noDeviceMessage = "No device found";
 
@@ -64,18 +65,15 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         public async Task<bool> IsInteractiveAndUnlocked()
         {
-            if (Settings.Default.UseNfcScreenApi)
-            {
-                return await IsInteractiveAndUnlockedNfcAsync();
-            }
+            if (Settings.Default.UseNfcScreenApi) return await IsInteractiveAndUnlockedNfcAsync();
 
             return await IsInteractiveAsync() && !await IsLockedAsync();
         }
 
         private async Task<bool> IsInteractiveAndUnlockedNfcAsync()
         {
-            Stopwatch sw = Stopwatch.StartNew();
-            (bool screenOn, bool screenLocked) = await GetNfcScreenStateAsync();
+            var sw = Stopwatch.StartNew();
+            (var screenOn, var screenLocked) = await GetNfcScreenStateAsync();
 
             Logger.Log(LogMessageLevel.Debug, $"IsInteractive: {screenOn}. IsLocked: {screenLocked}.", sw.Elapsed);
 
@@ -84,12 +82,9 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         public async Task<bool> IsInteractiveAsync()
         {
-            if (Settings.Default.UseNfcScreenApi)
-            {
-                return await IsInteractiveNfcAsync();
-            }
+            if (Settings.Default.UseNfcScreenApi) return await IsInteractiveNfcAsync();
 
-            Stopwatch sw = Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();
 
             var outputLines = await ExecuteAdbCommandAsync("shell service call power 12");
 
@@ -102,9 +97,9 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         private async Task<bool> IsInteractiveNfcAsync()
         {
-            Stopwatch sw = Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();
 
-            (bool screenOn, _) = await GetNfcScreenStateAsync();
+            var (screenOn, _) = await GetNfcScreenStateAsync();
 
             Logger.Log(LogMessageLevel.Debug, $"IsInteractive: {screenOn}", sw.Elapsed);
 
@@ -115,13 +110,13 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         {
             var outputLines = await ExecuteAdbCommandAsync("shell dumpsys nfc");
 
-            foreach (string line in outputLines.Select(x => x.Trim()))
+            foreach (var line in outputLines.Select(x => x.Trim()))
             {
                 const string screenStateId = "Screen State:";
 
                 if (line.StartsWith(screenStateId))
                 {
-                    string value = line.Substring(screenStateId.Length).Trim();
+                    var value = line.Substring(screenStateId.Length).Trim();
 
                     switch (value.ToUpperInvariant())
                     {
@@ -144,28 +139,24 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         public async Task<bool> IsLockedAsync()
         {
-            if (Settings.Default.UseNfcScreenApi)
-            {
-                return await IsLockedNfcAsync();
-            }
+            if (Settings.Default.UseNfcScreenApi) return await IsLockedNfcAsync();
 
-            Stopwatch sw = Stopwatch.StartNew();
-            
+            var sw = Stopwatch.StartNew();
+
             var outputLines = await ExecuteAdbCommandAsync("shell service call trust 7");
 
             var result = ParseBinaryResult(outputLines);
 
             Logger.Log(LogMessageLevel.Debug, $"IsLocked: {result}", sw.Elapsed);
 
-
             return result;
         }
 
         private async Task<bool> IsLockedNfcAsync()
         {
-            Stopwatch sw = Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();
 
-            (_, bool screenLocked) = await GetNfcScreenStateAsync();
+            var (_, screenLocked) = await GetNfcScreenStateAsync();
 
             Logger.Log(LogMessageLevel.Debug, $"IsLocked: {screenLocked}", sw.Elapsed);
 
@@ -175,14 +166,10 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         private static bool ParseBinaryResult(List<string> outputLines)
         {
             foreach (var line in outputLines)
-            {
                 if (line.StartsWith("Result", StringComparison.OrdinalIgnoreCase))
-                {
                     return line.Contains("00000001");
-                }
-            }
 
-            throw new Exception(($"Unable to parse result: {outputLines}"));
+            throw new Exception($"Unable to parse result: {outputLines}");
         }
 
         private async Task<List<string>> ExecuteAdbCommandAsync(string arguments)
@@ -198,27 +185,21 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
             // Redirect both streams so we can write/read them.
             // Start the process.
-            Process p = Process.Start(si);
+            var p = Process.Start(si);
 
-            if (p == null)
-            {
-                throw new Exception($"Unable to start process {si.FileName}");
-            }
+            if (p == null) throw new Exception($"Unable to start process {si.FileName}");
 
             var list = new List<string>();
 
             string line;
-            while ((line = await p.StandardOutput.ReadLineAsync()) != null)
-            {
-                list.Add(line);
-            }
+            while ((line = await p.StandardOutput.ReadLineAsync()) != null) list.Add(line);
 
             return list;
         }
 
         public async Task EnableInteractiveAsync()
         {
-            Stopwatch sw = Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();
 
             await ExecuteAdbCommandAsync("shell input keyevent 82");
 
@@ -227,8 +208,8 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         public async Task UnlockAsync(string pin)
         {
-            bool pinActive = !String.IsNullOrWhiteSpace(pin);
-            Stopwatch sw = Stopwatch.StartNew();
+            var pinActive = !string.IsNullOrWhiteSpace(pin);
+            var sw = Stopwatch.StartNew();
 
             await ExecuteAdbCommandAsync("shell input keyevent 82");
 
@@ -240,13 +221,21 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                 await ExecuteAdbCommandAsync("shell input keyevent 66");
             }
 
-            Logger.Log(LogMessageLevel.Information, pinActive ? "Device unlocked with pin" : "Device unlocked without pin", sw.Elapsed);
+            Logger.Log(LogMessageLevel.Information,
+                pinActive ? "Device unlocked with pin" : "Device unlocked without pin", sw.Elapsed);
         }
 
         public async Task LockAsync()
         {
-            Stopwatch sw = Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();
 
+            //Pressing back twice to back out of e.g. photo mode in the camera
+            await ExecuteAdbCommandAsync("shell input keyevent 4"); //back
+            await Task.Delay(100);
+            await ExecuteAdbCommandAsync("shell input keyevent 4"); //back
+            await Task.Delay(100);
+
+            //Locking
             await ExecuteAdbCommandAsync("shell input keyevent 26");
 
             Logger.Log(LogMessageLevel.Information, "Device locked", sw.Elapsed);
@@ -254,15 +243,8 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         public async Task OpenCameraAsync()
         {
-            Stopwatch sw = Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();
 
-            //Opening, pressing back twice to back out of e.g. photo mode, and then opening again
-            await ExecuteAdbCommandAsync($"shell am start -a android.media.action.{Settings.Default.CameraApp}");
-            await Task.Delay(500);
-            await ExecuteAdbCommandAsync($"shell input keyevent 4"); //back
-            await Task.Delay(100);
-            await ExecuteAdbCommandAsync($"shell input keyevent 4"); //back
-            await Task.Delay(100);
             await ExecuteAdbCommandAsync($"shell am start -a android.media.action.{Settings.Default.CameraApp}");
 
             Logger.Log(LogMessageLevel.Information, "Camera opened", sw.Elapsed);
@@ -270,25 +252,22 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         public async Task FocusCameraAsync()
         {
-            Stopwatch sw = Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();
 
             await ExecuteAdbCommandAsync("shell input keyevent KEYCODE_FOCUS");
 
-            Logger.Log(LogMessageLevel.Debug, $"Camera focused", sw.Elapsed);
+            Logger.Log(LogMessageLevel.Debug, "Camera focused", sw.Elapsed);
         }
 
         public async Task<int> DownloadFilesAsync(int lastKnownCounter)
         {
-            Stopwatch sw = Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();
 
-            List<string> files = await GetStableFileListAsync();
+            var files = await GetStableFileListAsync();
 
             Logger.Log(LogMessageLevel.Information, $"{files.Count} files ready for download", sw.Elapsed);
 
-            foreach (string file in files)
-            {
-                lastKnownCounter = await TryDownloadFileAsync(file, lastKnownCounter);
-            }
+            foreach (var file in files) lastKnownCounter = await TryDownloadFileAsync(file, lastKnownCounter);
 
             Logger.Log(LogMessageLevel.Debug, "All files downloaded", sw.Elapsed);
 
@@ -321,12 +300,10 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             var counter = lastKnownCounter + 1;
 
             while (File.Exists(Path.Combine(GetPublishFolder(counter), GetPublishFilename(counter, filename))))
-            {
                 counter++;
-            }
 
 
-            string publishFolder = GetPublishFolder(counter);
+            var publishFolder = GetPublishFolder(counter);
 
             if (!Directory.Exists(publishFolder))
             {
@@ -347,13 +324,14 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         private string GetPublishFilename(int counter, string originalFilename)
         {
             return
-                $"{String.Format(Settings.Default.PublishFilenamePattern, counter)}{Path.GetExtension(originalFilename)}";
+                $"{string.Format(Settings.Default.PublishFilenamePattern, counter)}{Path.GetExtension(originalFilename)}";
         }
 
         private string GetPublishFolder(int lastKnownCounter)
         {
-            int lowerLimit = (lastKnownCounter / Settings.Default.PublishFilesPerFolder) * Settings.Default.PublishFilesPerFolder;
-            int upperLimit = lowerLimit + Settings.Default.PublishFilesPerFolder - 1;
+            var lowerLimit = lastKnownCounter / Settings.Default.PublishFilesPerFolder *
+                             Settings.Default.PublishFilesPerFolder;
+            var upperLimit = lowerLimit + Settings.Default.PublishFilesPerFolder - 1;
 
             return Path.Combine(Settings.Default.PublishFolder, $"{lowerLimit}-{upperLimit}");
         }
@@ -368,9 +346,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                 await ExecuteAdbCommandAsync($"pull {fullDevicePath} {Settings.Default.WorkingFolder}");
 
             if (outputLines.Count != 1 || !outputLines[0].Contains("pulled"))
-            {
                 throw new Exception($"Unable to pull file {filename}. Error: {outputLines.FirstOrDefault()}");
-            }
 
             Logger.Log(LogMessageLevel.Information, $"Downloaded file '{filename}'");
         }
@@ -382,15 +358,13 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
             if (!Settings.Default.DeleteAfterDownload)
             {
-                Logger.Log(LogMessageLevel.Debug, $"Deletion disabled in settings");
+                Logger.Log(LogMessageLevel.Debug, "Deletion disabled in settings");
                 return;
             }
 
             var outputLines = await ExecuteAdbCommandAsync($"shell rm {fullDevicePath}");
             if (outputLines.Count != 0)
-            {
                 throw new Exception($"Error deleting file '{fullDevicePath}': {outputLines[0]}");
-            }
 
             Logger.Log(LogMessageLevel.Information, $"Deleted file '{filename}'");
         }
@@ -399,10 +373,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         {
             var folder = Settings.Default.DeviceImageFolder;
 
-            if (!folder.EndsWith("/"))
-            {
-                folder = $"{folder}/";
-            }
+            if (!folder.EndsWith("/")) folder = $"{folder}/";
 
             return $"{folder}{filename}";
         }
@@ -419,7 +390,8 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             var tokenFilepath = Path.Combine(Settings.Default.WorkingFolder, $"{originalFilename}.token");
 
             using (File.Create(tokenFilepath))
-            { }
+            {
+            }
         }
 
         private async Task<List<string>> GetStableFileListAsync()
@@ -427,16 +399,16 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             Logger.Log(LogMessageLevel.Debug, "Assembling list of stable files on device");
             var matchRegex = new Regex(Settings.Default.FileSelectionRegex, RegexOptions.IgnoreCase);
 
-            Dictionary<string, int> firstListing = await GetFileListAsync();
+            var firstListing = await GetFileListAsync();
             await Task.Delay(200);
-            Dictionary<string, int> secondListing = await GetFileListAsync();
+            var secondListing = await GetFileListAsync();
 
             var list = new List<string>();
 
-            foreach (KeyValuePair<string, int> firstPair in firstListing)
+            foreach (var firstPair in firstListing)
             {
-                string fileName = firstPair.Key;
-                int blocksFirstListing = firstPair.Value;
+                var fileName = firstPair.Key;
+                var blocksFirstListing = firstPair.Value;
 
                 if (!matchRegex.IsMatch(fileName))
                 {
@@ -450,7 +422,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                     continue; //Empty
                 }
 
-                if (!secondListing.TryGetValue(fileName, out int blocksSecondListing))
+                if (!secondListing.TryGetValue(fileName, out var blocksSecondListing))
                 {
                     Logger.Log(LogMessageLevel.Debug, $"File '{fileName}' was not found in second listing.");
                     continue; //file not found in second listing
@@ -458,11 +430,13 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
                 if (blocksFirstListing != blocksSecondListing)
                 {
-                    Logger.Log(LogMessageLevel.Debug, $"File '{fileName}' has changed from {blocksFirstListing} to {blocksSecondListing} blocks and is probably being written to.");
+                    Logger.Log(LogMessageLevel.Debug,
+                        $"File '{fileName}' has changed from {blocksFirstListing} to {blocksSecondListing} blocks and is probably being written to.");
                     continue; //file is being written to
                 }
 
-                Logger.Log(LogMessageLevel.Debug, $"File '{fileName}' is stable and will be included. Size: {blocksFirstListing} blocks.");
+                Logger.Log(LogMessageLevel.Debug,
+                    $"File '{fileName}' is stable and will be included. Size: {blocksFirstListing} blocks.");
 
                 list.Add(fileName);
             }
@@ -472,20 +446,17 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         private async Task<Dictionary<string, int>> GetFileListAsync()
         {
-            List<string> outputLines = await ExecuteAdbCommandAsync($"shell ls -s {Settings.Default.DeviceImageFolder}");
+            var outputLines = await ExecuteAdbCommandAsync($"shell ls -s {Settings.Default.DeviceImageFolder}");
 
             var listing = new Dictionary<string, int>();
 
             var fileLineRegex = new Regex(@"^\s*(?'Blocks'\d+)\s+(?'Filename'.*\S)\s*");
 
-            foreach (string line in outputLines)
+            foreach (var line in outputLines)
             {
                 var match = fileLineRegex.Match(line);
 
-                if (!match.Success)
-                {
-                    continue;
-                }
+                if (!match.Success) continue;
 
                 listing.Add(match.Groups["Filename"].Value, int.Parse(match.Groups["Blocks"].Value));
             }
@@ -495,11 +466,11 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         public async Task TakeSinglePhotoAsync()
         {
-            Stopwatch sw = Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();
 
             await ExecuteAdbCommandAsync("shell input keyevent KEYCODE_VOLUME_UP");
 
-            Logger.Log(LogMessageLevel.Debug, $"Photo taken", sw.Elapsed);
+            Logger.Log(LogMessageLevel.Debug, "Photo taken", sw.Elapsed);
         }
     }
 }
