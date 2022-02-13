@@ -6,7 +6,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MagnusAkselvoll.AndroidPhotoBooth.App.Properties;
 
 namespace MagnusAkselvoll.AndroidPhotoBooth.App
 {
@@ -30,6 +29,11 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
         {
             _font = new Font(Font.FontFamily, 75);
             _brush = Brushes.OrangeRed;
+
+            _countdownLabel.Visible = false;
+            _countdownLabel.Height = (int)(Height * 0.7);
+            _countdownLabel.Width = (int)(Width * 0.4);
+            _countdownLabel.Font = new Font(FontFamily.GenericMonospace, (int) (_countdownLabel.Height * 0.8), FontStyle.Bold);
 
             Cursor.Hide();
 
@@ -137,6 +141,17 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             };
 
             e.Graphics.DrawString(text, _font, _brush, locationToDraw);
+        }
+
+        public void CountdownChanged(int secondsRemaining)
+        {
+            _countdownLabel.Text = secondsRemaining.ToString();
+            _countdownLabel.Visible = true;
+        }
+
+        public void CountdownTerminated()
+        {
+            _countdownLabel.Visible = false;
         }
     }
 }

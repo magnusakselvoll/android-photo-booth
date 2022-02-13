@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this._pictureBox = new System.Windows.Forms.PictureBox();
+            this._countdownLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this._pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -44,12 +45,25 @@
             this._pictureBox.TabStop = false;
             this._pictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this._pictureBox_Paint);
             // 
+            // _countdownLabel
+            // 
+            this._countdownLabel.BackColor = System.Drawing.Color.Transparent;
+            this._countdownLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._countdownLabel.ForeColor = System.Drawing.Color.OrangeRed;
+            this._countdownLabel.Location = new System.Drawing.Point(0, 0);
+            this._countdownLabel.Name = "_countdownLabel";
+            this._countdownLabel.Size = new System.Drawing.Size(777, 653);
+            this._countdownLabel.TabIndex = 1;
+            this._countdownLabel.Text = "label1";
+            this._countdownLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // PictureForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(777, 653);
             this.ControlBox = false;
+            this.Controls.Add(this._countdownLabel);
             this.Controls.Add(this._pictureBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "PictureForm";
@@ -66,5 +80,6 @@
         #endregion
 
         private System.Windows.Forms.PictureBox _pictureBox;
+        private System.Windows.Forms.Label _countdownLabel;
     }
 }

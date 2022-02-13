@@ -24,6 +24,9 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         private DateTime _lastDownloadInitiated = DateTime.MinValue;
         private int _lastKnownCounter;
 
+        public event EventHandler<int> OnCountdownChanged; 
+        public event EventHandler OnCountdownTerminated; 
+
         public CameraForm()
         {
             InitializeComponent();
@@ -339,6 +342,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
                 var countdown = new Countdown(Properties.Settings.Default.Countdown);
                 countdown.OnCountdownTick += OnCountdownTick;
+                countdown.OnCountdownComplete += OnCountdownZero;
                 countdown.Start();
 
                 var controller = await TryGetController();
@@ -391,9 +395,22 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             }
         }
 
+        private void OnCountdownZero(object sender, EventArgs e)
+        {
+            Invoke(new Action(() =>
+            {
+                Logger.Log(LogMessageLevel.Debug, "Countdown complete");
+                OnCountdownTerminated?.Invoke(this, EventArgs.Empty);
+            }));
+        }
+
         private void OnCountdownTick(object sender, int secondsRemaining)
         {
-            Invoke(new Action(() => { Logger.Log(LogMessageLevel.Information, $"Countdown: {secondsRemaining}"); }));
+            Invoke(new Action(() =>
+            {
+                Logger.Log(LogMessageLevel.Information, $"Countdown: {secondsRemaining}");
+                OnCountdownChanged?.Invoke(this, secondsRemaining);
+            }));
         }
 
         private void ReleaseInteractiveSemaphore()

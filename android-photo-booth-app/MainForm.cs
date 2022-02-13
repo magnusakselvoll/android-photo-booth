@@ -7,6 +7,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
     public partial class MainForm : Form
     {
         private CameraForm _cameraForm;
+        private PictureForm _pictureForm;
 
         public MainForm()
         {
@@ -38,8 +39,10 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 
         private void StartSlideShow()
         {
-            var form = new PictureForm(Settings.Default);
-            form.ShowDialog(this);
+            _pictureForm = new PictureForm(Settings.Default);
+            _pictureForm.ShowDialog(this);
+
+            _pictureForm = null;
         }
 
         private void LoadSettings()
@@ -71,8 +74,20 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 
             _cameraForm = new CameraForm();
             _cameraForm.FormClosed += OnCameraFormClosed;
+            _cameraForm.OnCountdownChanged += OnCountdownChanged;
+            _cameraForm.OnCountdownTerminated += OnCountdownTerminated;
 
             _cameraForm.Show();
+        }
+
+        private void OnCountdownTerminated(object sender, EventArgs e)
+        {
+            _pictureForm?.CountdownTerminated();
+        }
+
+        private void OnCountdownChanged(object sender, int secondsRemaining)
+        {
+            _pictureForm?.CountdownChanged(secondsRemaining);
         }
 
         private void OnCameraFormClosed(object sender, FormClosedEventArgs e)
@@ -80,6 +95,8 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             if (_cameraForm != null)
             {
                 _cameraForm.FormClosed -= OnCameraFormClosed;
+                _cameraForm.OnCountdownChanged -= OnCountdownChanged;
+
                 _cameraForm.Dispose();
 
                 _cameraForm = null;
