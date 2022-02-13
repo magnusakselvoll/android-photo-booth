@@ -238,5 +238,17 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera.Properties {
                 this["Countdown"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("750")]
+        public int AdjustmentCountdownMS {
+            get {
+                return ((int)(this["AdjustmentCountdownMS"]));
+            }
+            set {
+                this["AdjustmentCountdownMS"] = value;
+            }
+        }
     }
 }

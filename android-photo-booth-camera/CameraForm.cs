@@ -23,8 +23,6 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         private JoystickOffset _joystickOffset;
         private DateTime _lastCameraAction;
         private int _lastKnownCounter;
-        private TimeSpan _lastKnownTimeToTakeSinglePhoto = TimeSpan.FromSeconds(1);
-
 
         public CameraForm()
         {
@@ -453,17 +451,17 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                 }
 
                 
-                TimeSpan timeToWait = countdown.TimeRemaining - _lastKnownTimeToTakeSinglePhoto;
+                TimeSpan timeToWait = countdown.TimeRemaining - TimeSpan.FromMilliseconds(Properties.Settings.Default.AdjustmentCountdownMS);
 
                 if (timeToWait > TimeSpan.Zero)
                 {
 
-                    Logger.Log(LogMessageLevel.Debug, $"Last photo took {(int) _lastKnownTimeToTakeSinglePhoto.TotalMilliseconds}ms. Waiting {(int) timeToWait.TotalMilliseconds}ms for countdown to finish");
+                    Logger.Log(LogMessageLevel.Debug, $"Waiting {(int) timeToWait.TotalMilliseconds}ms for countdown to finish ({Properties.Settings.Default.AdjustmentCountdownMS}ms adjustment)");
                     await Task.Delay(timeToWait);
                 }
 
 
-                _lastKnownTimeToTakeSinglePhoto = await controller.TakeSinglePhotoAsync();
+                await controller.TakeSinglePhotoAsync();
 
                 UpdateLastCameraAction();
 

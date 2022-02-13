@@ -47,6 +47,7 @@
             System.Windows.Forms.Label label4;
             System.Windows.Forms.Label label5;
             System.Windows.Forms.Label label6;
+            System.Windows.Forms.Label label7;
             this._saveButton = new System.Windows.Forms.Button();
             this._cancelButton = new System.Windows.Forms.Button();
             this._adbBrowseButton = new System.Windows.Forms.Button();
@@ -75,7 +76,8 @@
             this._joystickButtonTextbox = new System.Windows.Forms.TextBox();
             this._detectJoystickButton = new System.Windows.Forms.Button();
             this._inactivityLockTimeoutTextBox = new System.Windows.Forms.TextBox();
-            this.CountdownNumeric = new System.Windows.Forms.NumericUpDown();
+            this._countdownNumeric = new System.Windows.Forms.NumericUpDown();
+            this._countdownAdjustmentNumeric = new System.Windows.Forms.NumericUpDown();
             adbPathLabel = new System.Windows.Forms.Label();
             cameraAppLabel = new System.Windows.Forms.Label();
             focusKeepaliveIntervalLabel = new System.Windows.Forms.Label();
@@ -94,10 +96,12 @@
             label4 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
             label6 = new System.Windows.Forms.Label();
+            label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this._settingsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._cameraTypeBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._joystickInfoBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.CountdownNumeric)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this._countdownNumeric)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this._countdownAdjustmentNumeric)).BeginInit();
             this.SuspendLayout();
             // 
             // adbPathLabel
@@ -279,6 +283,16 @@
             label6.Size = new System.Drawing.Size(64, 13);
             label6.TabIndex = 41;
             label6.Text = "Countdown:";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new System.Drawing.Point(12, 438);
+            label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label7.Name = "label7";
+            label7.Size = new System.Drawing.Size(140, 13);
+            label7.TabIndex = 43;
+            label7.Text = "Countdown adjustment (ms):";
             // 
             // _saveButton
             // 
@@ -546,13 +560,31 @@
             this._inactivityLockTimeoutTextBox.Size = new System.Drawing.Size(317, 20);
             this._inactivityLockTimeoutTextBox.TabIndex = 32;
             // 
-            // CountdownNumeric
+            // _countdownNumeric
             // 
-            this.CountdownNumeric.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "Countdown", true));
-            this.CountdownNumeric.Location = new System.Drawing.Point(159, 410);
-            this.CountdownNumeric.Name = "CountdownNumeric";
-            this.CountdownNumeric.Size = new System.Drawing.Size(120, 20);
-            this.CountdownNumeric.TabIndex = 42;
+            this._countdownNumeric.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "Countdown", true));
+            this._countdownNumeric.Location = new System.Drawing.Point(159, 410);
+            this._countdownNumeric.Name = "_countdownNumeric";
+            this._countdownNumeric.Size = new System.Drawing.Size(120, 20);
+            this._countdownNumeric.TabIndex = 42;
+            // 
+            // _countdownAdjustmentNumeric
+            // 
+            this._countdownAdjustmentNumeric.DataBindings.Add(new System.Windows.Forms.Binding("Text", this._settingsBindingSource, "AdjustmentCountdownMS", true));
+            this._countdownAdjustmentNumeric.Location = new System.Drawing.Point(159, 436);
+            this._countdownAdjustmentNumeric.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this._countdownAdjustmentNumeric.Minimum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            -2147483648});
+            this._countdownAdjustmentNumeric.Name = "_countdownAdjustmentNumeric";
+            this._countdownAdjustmentNumeric.Size = new System.Drawing.Size(120, 20);
+            this._countdownAdjustmentNumeric.TabIndex = 44;
             // 
             // CameraSettingsForm
             // 
@@ -560,7 +592,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.ClientSize = new System.Drawing.Size(543, 628);
-            this.Controls.Add(this.CountdownNumeric);
+            this.Controls.Add(this._countdownAdjustmentNumeric);
+            this.Controls.Add(label7);
+            this.Controls.Add(this._countdownNumeric);
             this.Controls.Add(label6);
             this.Controls.Add(label5);
             this.Controls.Add(this._inactivityLockTimeoutTextBox);
@@ -610,7 +644,8 @@
             ((System.ComponentModel.ISupportInitialize)(this._settingsBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._cameraTypeBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._joystickInfoBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.CountdownNumeric)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this._countdownNumeric)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this._countdownAdjustmentNumeric)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -645,6 +680,7 @@
         private System.Windows.Forms.TextBox _joystickButtonTextbox;
         private System.Windows.Forms.Button _detectJoystickButton;
         private System.Windows.Forms.TextBox _inactivityLockTimeoutTextBox;
-        private System.Windows.Forms.NumericUpDown CountdownNumeric;
+        private System.Windows.Forms.NumericUpDown _countdownNumeric;
+        private System.Windows.Forms.NumericUpDown _countdownAdjustmentNumeric;
     }
 }

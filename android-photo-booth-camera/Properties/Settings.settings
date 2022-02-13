@@ -56,5 +56,8 @@
     <Setting Name="Countdown" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
+    <Setting Name="AdjustmentCountdownMS" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">750</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
