@@ -9,13 +9,6 @@ using System.Threading.Tasks;
 
 namespace MagnusAkselvoll.AndroidPhotoBooth.App
 {
-    internal enum InterruptReason
-    {
-        None,
-        GoPrevious,
-        GoNext,
-        PausePlay
-    }
     internal sealed class SlideshowControl
     {
         public EventHandler<ImageChosenEventArgs> ImageChosen;
@@ -37,8 +30,6 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 
             _extensions = GetExtensionsHashset();
         }
-
-        public bool Pause { get; set; }
 
         private void Interrupt(InterruptReason reason)
         {
@@ -80,6 +71,16 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             Interrupt(InterruptReason.PausePlay);
         }
 
+        public void Pause()
+        {
+            Interrupt(InterruptReason.Pause);
+        }
+
+        public void ResumeWithNewPhoto()
+        {
+            Interrupt(InterruptReason.ResumeWithNewPhoto);
+        }
+
         public void Start(CancellationToken externalCancellationToken)
         {
             CancellationToken cancellationToken = ResetCancellationToken(externalCancellationToken);
@@ -113,13 +114,6 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 
                 while (true)
                 {
-                    if (Pause)
-                    {
-                        Task.Delay(100, cancellationToken);
-                        continue;
-                    }
-
-
                     FileInfo fileInfo;
                     bool newFile = false;
 
@@ -246,6 +240,19 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
                                     break;
                                 case InterruptReason.PausePlay:
                                     paused = !paused;
+                                    break;
+                                case InterruptReason.Pause:
+                                    paused = true;
+                                    break;
+                                case InterruptReason.ResumeWithNewPhoto:
+                                    var resumeTimeout = DateTime.UtcNow.AddSeconds(10);
+
+                                    while (_newFiles.Count == 0 && DateTime.UtcNow < resumeTimeout)
+                                    {
+                                        Task.Delay(100, cancellationToken);
+                                    }
+
+                                    paused = false;
                                     break;
                                 default:
                                     throw new ArgumentOutOfRangeException();

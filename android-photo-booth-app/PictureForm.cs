@@ -84,7 +84,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 
             if (_lastRestartDelay < _maxRestartDelay)
             {
-                _lastRestartDelay = _lastRestartDelay + _lastRestartDelay;
+                _lastRestartDelay += _lastRestartDelay;
 
                 if (_lastRestartDelay > _maxRestartDelay)
                 {
@@ -160,7 +160,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             _countdownLabel.Visible = true;
             if (_slideshowControl != null)
             {
-                _slideshowControl.Pause = true;
+                _slideshowControl.Pause();
             }
         }
 
@@ -171,7 +171,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             _hideCountdownOnNextImage = true;
             if (_slideshowControl != null)
             {
-                _slideshowControl.Pause = false;
+                _slideshowControl.ResumeWithNewPhoto();
             }
         }
     }

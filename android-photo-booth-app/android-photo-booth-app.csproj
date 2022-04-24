@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="HistoryQueue.cs" />
     <Compile Include="ImageChosenEventArgs.cs" />
+    <Compile Include="InterruptReason.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
