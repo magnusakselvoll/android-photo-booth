@@ -32,16 +32,13 @@
             this._pictureFolder = new System.Windows.Forms.TextBox();
             this._folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this._browseButton = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this._startButton = new System.Windows.Forms.Button();
-            this._minimumDisplayTime = new System.Windows.Forms.NumericUpDown();
             this._maximumDisplayTime = new System.Windows.Forms.NumericUpDown();
             this._showFilenames = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this._openCameraButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this._minimumDisplayTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._maximumDisplayTime)).BeginInit();
             this.SuspendLayout();
             // 
@@ -74,19 +71,10 @@
             this._browseButton.UseVisualStyleBackColor = true;
             this._browseButton.Click += new System.EventHandler(this.OnBrowseButtonClick);
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 40);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(119, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Minimum display time (s)";
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 66);
+            this.label3.Location = new System.Drawing.Point(12, 40);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(122, 13);
             this.label3.TabIndex = 5;
@@ -105,16 +93,9 @@
             this._startButton.UseVisualStyleBackColor = true;
             this._startButton.Click += new System.EventHandler(this.OnStartButtonClick);
             // 
-            // _minimumDisplayTime
-            // 
-            this._minimumDisplayTime.Location = new System.Drawing.Point(140, 38);
-            this._minimumDisplayTime.Name = "_minimumDisplayTime";
-            this._minimumDisplayTime.Size = new System.Drawing.Size(46, 20);
-            this._minimumDisplayTime.TabIndex = 4;
-            // 
             // _maximumDisplayTime
             // 
-            this._maximumDisplayTime.Location = new System.Drawing.Point(140, 64);
+            this._maximumDisplayTime.Location = new System.Drawing.Point(140, 38);
             this._maximumDisplayTime.Name = "_maximumDisplayTime";
             this._maximumDisplayTime.Size = new System.Drawing.Size(46, 20);
             this._maximumDisplayTime.TabIndex = 6;
@@ -122,7 +103,7 @@
             // _showFilenames
             // 
             this._showFilenames.AutoSize = true;
-            this._showFilenames.Location = new System.Drawing.Point(140, 91);
+            this._showFilenames.Location = new System.Drawing.Point(140, 64);
             this._showFilenames.Name = "_showFilenames";
             this._showFilenames.Size = new System.Drawing.Size(15, 14);
             this._showFilenames.TabIndex = 8;
@@ -131,7 +112,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 91);
+            this.label4.Location = new System.Drawing.Point(12, 64);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(81, 13);
             this.label4.TabIndex = 7;
@@ -169,10 +150,8 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this._showFilenames);
             this.Controls.Add(this._maximumDisplayTime);
-            this.Controls.Add(this._minimumDisplayTime);
             this.Controls.Add(this._startButton);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this._browseButton);
             this.Controls.Add(this._pictureFolder);
             this.Controls.Add(this.label1);
@@ -180,7 +159,6 @@
             this.Name = "MainForm";
             this.Text = "Android Photo Booth";
             this.Load += new System.EventHandler(this.MainForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this._minimumDisplayTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._maximumDisplayTime)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -192,10 +170,8 @@
         private System.Windows.Forms.TextBox _pictureFolder;
         private System.Windows.Forms.FolderBrowserDialog _folderBrowserDialog;
         private System.Windows.Forms.Button _browseButton;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button _startButton;
-        private System.Windows.Forms.NumericUpDown _minimumDisplayTime;
         private System.Windows.Forms.NumericUpDown _maximumDisplayTime;
         private System.Windows.Forms.CheckBox _showFilenames;
         private System.Windows.Forms.Label label4;

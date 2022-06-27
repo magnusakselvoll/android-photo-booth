@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MagnusAkselvoll.AndroidPhotoBooth.App.Properties;
 
 namespace MagnusAkselvoll.AndroidPhotoBooth.App
 {
@@ -190,16 +191,10 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
                     }
 
                     DateTime maxDisplayUntil = imageDisplayed.AddSeconds(Settings.MaximumDisplaySeconds);
-                    DateTime minDisplayUntil = imageDisplayed.AddSeconds(Settings.MinimumDisplaySeconds);
                     bool interrupted = false;
                     bool paused = false;
                     while (!interrupted && (maxDisplayUntil > DateTime.Now || paused))
                     {
-                        if (_newFiles.Count > 0 && minDisplayUntil < DateTime.Now)
-                        {
-                            break;
-                        }
-
                         int millisecondsToSleep = Math.Min(Settings.ClockIntervalMilliseconds,
                             (int) Math.Ceiling((maxDisplayUntil - DateTime.Now).TotalMilliseconds));
 

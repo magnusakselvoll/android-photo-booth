@@ -1,12 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="flashair_slideshow.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MagnusAkselvoll.AndroidPhotoBooth.App.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="PictureFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="MinimumDisplaySeconds" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="MaximumDisplaySeconds" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">30</Value>

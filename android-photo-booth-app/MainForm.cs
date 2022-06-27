@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using MagnusAkselvoll.AndroidPhotoBooth.App.Properties;
 using MagnusAkselvoll.AndroidPhotoBooth.Camera;
 
 namespace MagnusAkselvoll.AndroidPhotoBooth.App
@@ -50,7 +51,6 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             var settings = Settings.Default;
 
             _pictureFolder.Text = settings.PictureFolder;
-            _minimumDisplayTime.Value = settings.MinimumDisplaySeconds;
             _maximumDisplayTime.Value = settings.MaximumDisplaySeconds;
             _showFilenames.Checked = settings.ShowFileNames;
         }
@@ -61,7 +61,6 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             var settings = Settings.Default;
 
             settings.PictureFolder = _pictureFolder.Text;
-            settings.MinimumDisplaySeconds = (int) _minimumDisplayTime.Value;
             settings.MaximumDisplaySeconds = (int) _maximumDisplayTime.Value;
             settings.ShowFileNames = _showFilenames.Checked;
 
