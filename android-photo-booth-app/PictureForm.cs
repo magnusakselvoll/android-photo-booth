@@ -11,14 +11,14 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 {
     internal partial class PictureForm : Form
     {
-        private Font _font;
-        private Brush _brush;
+        private Font? _font;
+        private Brush? _brush;
         public Settings Settings { get; }
-        private Task Task { get; set; }
-        private string _fileName;
+        private Task? Task { get; set; }
+        private string? _fileName;
         private bool _hideCountdownOnNextImage = false;
 
-        private CancellationTokenSource CancellationTokenSource { get; set; }
+        private CancellationTokenSource? CancellationTokenSource { get; set; }
 
         public PictureForm(Settings settings)
         {
@@ -66,9 +66,9 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 
         private TimeSpan _lastRestartDelay = TimeSpan.FromSeconds(1);
         private readonly TimeSpan _maxRestartDelay = TimeSpan.FromMinutes(5);
-        private SlideshowControl _slideshowControl;
+        private SlideshowControl? _slideshowControl;
 
-        private void SlideshowControlCrashed(object sender, UnhandledExceptionEventArgs e)
+        private void SlideshowControlCrashed(object? sender, UnhandledExceptionEventArgs e)
         {
             using (EventLog eventLog = new EventLog("Application"))
             {
@@ -120,7 +120,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
         {
             if (Task != null && Task.Status == TaskStatus.Running)
             {
-                CancellationTokenSource.Cancel();
+                CancellationTokenSource?.Cancel();
 
                 Task.Wait(TimeSpan.FromSeconds(1));
             }
@@ -134,7 +134,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 
         private void _pictureBox_Paint(object sender, PaintEventArgs e)
         {
-            if (!Settings.ShowFileNames || String.IsNullOrWhiteSpace(_fileName))
+            if (!Settings.ShowFileNames || String.IsNullOrWhiteSpace(_fileName) || _font == null || _brush == null)
             {
                 return;
             }

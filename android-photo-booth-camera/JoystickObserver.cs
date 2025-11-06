@@ -8,8 +8,8 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
     internal sealed class JoystickObserver : IDisposable
     {
         private bool _disposed;
-        private Task ObserverTask { get; set; }
-        private CancellationTokenSource CancellationTokenSource { get; set; }
+        private Task? ObserverTask { get; set; }
+        private CancellationTokenSource? CancellationTokenSource { get; set; }
 
         public JoystickObserver(JoystickInfo joystickInfo)
         {
@@ -18,7 +18,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
         public JoystickInfo JoystickInfo { get; }
 
-        public event EventHandler<JoystickUpdate> OnJoystickUpdate;
+        public event EventHandler<JoystickUpdate>? OnJoystickUpdate;
 
         public void Start()
         {

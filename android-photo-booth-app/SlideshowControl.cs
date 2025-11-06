@@ -11,16 +11,16 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 {
     internal sealed class SlideshowControl
     {
-        public EventHandler<ImageChosenEventArgs> ImageChosen;
-        public EventHandler<UnhandledExceptionEventArgs> UnhandledExceptionThrown;
+        public EventHandler<ImageChosenEventArgs>? ImageChosen;
+        public EventHandler<UnhandledExceptionEventArgs>? UnhandledExceptionThrown;
         public Settings Settings { get; }
-        private CancellationTokenSource InternalCancellationTokenSource { get; set; }
+        private CancellationTokenSource? InternalCancellationTokenSource { get; set; }
         private InterruptReason InterruptType { get; set; }
 
         private readonly HashSet<string> _extensions;
         private readonly Random _random = new Random();
-        private DirectoryInfo _directory;
-        private List<FileInfo> _files;
+        private DirectoryInfo? _directory;
+        private List<FileInfo>? _files;
         private readonly Queue<FileInfo> _newFiles = new Queue<FileInfo>();
 
 
@@ -143,7 +143,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
                     else
                     {
                         newFile = _newFiles.Count > 0;
-                        fileInfo = newFile ? _newFiles.Dequeue() : TryGetRandomFile(_files);
+                        fileInfo = newFile ? _newFiles.Dequeue() : (_files != null ? TryGetRandomFile(_files) : null);
 
                         if (fileInfo != null)
                         {
@@ -151,7 +151,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
                         }
                     }
 
-                    Image image = null;
+                    Image? image = null;
 
                     if (fileInfo != null)
                     {
@@ -182,7 +182,10 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
                     }
                     
                     DateTime imageDisplayed = DateTime.Now;
-                    FireImageChosen(image, fileInfo.Name);
+                    if (image != null && fileInfo != null)
+                    {
+                        FireImageChosen(image, fileInfo.Name);
+                    }
 
                     if (newFile && _newFiles.Count == 0) //If last new file, refresh list of files
                     {
@@ -288,7 +291,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 
         private void FilesCreated(object sender, FileSystemEventArgs e)
         {
-            string extension = Path.GetExtension(e.Name);
+            string extension = Path.GetExtension(e.Name ?? string.Empty);
 
             if (!_extensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
             {
@@ -315,11 +318,14 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             if (force || _lastRefresh.AddMinutes(1) < DateTime.Now)
             {
                 _lastRefresh = DateTime.Now;
-                _files = GetFiles(_directory);
+                if (_directory != null)
+                {
+                    _files = GetFiles(_directory);
+                }
             }
         }
 
-        private static Image ReadImage(FileInfo fileInfo)
+        private static Image? ReadImage(FileInfo fileInfo)
         {
             
             if (!fileInfo.Exists)
@@ -331,7 +337,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 
             using (var image = new Bitmap(fileInfo.FullName))
             {
-                foreach (var prop in image.PropertyItems)
+                foreach (var prop in image.PropertyItems ?? [])
                 {
                     if (prop.Id == 0x0112)
                     {
@@ -386,7 +392,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
             return rotateFlipType;
         }
 
-        private FileInfo TryGetRandomFile(IList<FileInfo> files)
+        private FileInfo? TryGetRandomFile(IList<FileInfo> files)
         {
             if (files == null)
             {
@@ -413,9 +419,12 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
         {
             var hashSet = new HashSet<string>();
 
-            foreach (string extension in Settings.FilenameExtensions)
+            foreach (string extension in Settings.FilenameExtensions ?? [])
             {
-                hashSet.Add(extension);
+                if (!string.IsNullOrEmpty(extension))
+                {
+                    hashSet.Add(extension);
+                }
             }
 
             return hashSet;

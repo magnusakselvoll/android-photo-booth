@@ -32,6 +32,6 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera.Logging
             MessageLogged?.Invoke(null, message);
         }
 
-        public static event EventHandler<LogMessage> MessageLogged;
+        public static event EventHandler<LogMessage>? MessageLogged;
     }
 }

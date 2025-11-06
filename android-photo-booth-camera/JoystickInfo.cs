@@ -43,7 +43,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             }
         }
 
-        public static JoystickInfo ConfiguredJoystick
+        public static JoystickInfo? ConfiguredJoystick
         {
             get
             {

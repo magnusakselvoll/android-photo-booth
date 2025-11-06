@@ -12,20 +12,20 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
     {
         private readonly SemaphoreSlim _downloadSemaphore = new SemaphoreSlim(1, 1);
         private readonly SemaphoreSlim _interactiveCameraActionsSemaphore = new SemaphoreSlim(1, 1);
-        private AdbController _adbController;
+        private AdbController? _adbController;
         private bool _deviceDetected;
-        private CancellationTokenSource _downloadCancellationTokenSource;
+        private CancellationTokenSource? _downloadCancellationTokenSource;
 
-        private CancellationTokenSource _inactivityLockTokenSource;
+        private CancellationTokenSource? _inactivityLockTokenSource;
 
-        private JoystickObserver _joystickObserver;
+        private JoystickObserver? _joystickObserver;
         private JoystickOffset _joystickOffset;
         private DateTime _lastCameraAction;
         private DateTime _lastDownloadInitiated = DateTime.MinValue;
         private int _lastKnownCounter;
 
-        public event EventHandler<int> OnCountdownChanged; 
-        public event EventHandler OnCountdownTerminated; 
+        public event EventHandler<int>? OnCountdownChanged; 
+        public event EventHandler? OnCountdownTerminated; 
 
         public CameraForm()
         {
@@ -93,7 +93,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             Logger.MessageLogged -= OnMessageLogged;
         }
 
-        private void OnMessageLogged(object sender, LogMessage message)
+        private void OnMessageLogged(object? sender, LogMessage message)
         {
             const int maxLines = 200;
             const int reducedNumberOfLines = 150;
@@ -125,7 +125,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                 $"[{message.TimestampLocal:s}] {message.Level} - {message.Message}{(message.Duration.HasValue ? $" [{(long)message.Duration.Value.TotalMilliseconds} ms]" : string.Empty)}{Environment.NewLine}";
         }
 
-        private async Task<AdbController> TryGetController(bool tryDetectDevice = true, bool silent = false)
+        private async Task<AdbController?> TryGetController(bool tryDetectDevice = true, bool silent = false)
         {
             if (_adbController != null) return _adbController;
 
@@ -133,7 +133,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
             if (!adbController.Validate(out var message))
             {
-                if (!silent) ShowBadAdbSettingsDialog(message);
+                if (!silent) ShowBadAdbSettingsDialog(message ?? "Unknown error validating ADB");
 
                 return null;
             }
@@ -154,7 +154,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 
             var (connected, device, errorMessage) = await controller.TryConnectToDeviceAsync();
 
-            _deviceTextBox.Text = connected ? device.ToString() : errorMessage;
+            _deviceTextBox.Text = connected ? device?.ToString() ?? "Unknown device" : errorMessage ?? "Unknown error";
 
             return _deviceDetected = connected;
         }
@@ -397,7 +397,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             }
         }
 
-        private void OnCountdownZero(object sender, EventArgs e)
+        private void OnCountdownZero(object? sender, EventArgs e)
         {
             Invoke(new Action(() =>
             {
@@ -406,7 +406,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             }));
         }
 
-        private void OnCountdownTick(object sender, int secondsRemaining)
+        private void OnCountdownTick(object? sender, int secondsRemaining)
         {
             Invoke(new Action(() =>
             {
@@ -474,7 +474,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             return true;
         }
 
-        private void OnJoystickUpdated(object sender, JoystickUpdate update)
+        private void OnJoystickUpdated(object? sender, JoystickUpdate update)
         {
             if (update.Offset != _joystickOffset) return;
 

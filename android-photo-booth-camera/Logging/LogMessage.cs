@@ -13,7 +13,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera.Logging
         }
 
         public DateTime Timestamp { get; }
-        public DateTime TimestampLocal => TimeZone.CurrentTimeZone.ToLocalTime(Timestamp);
+        public DateTime TimestampLocal => TimeZoneInfo.ConvertTimeFromUtc(Timestamp, TimeZoneInfo.Local);
         public LogMessageLevel Level { get; }
         public string Message { get; }
         public TimeSpan? Duration { get; }

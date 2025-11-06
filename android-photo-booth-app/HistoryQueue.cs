@@ -18,11 +18,6 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.App
 
             Capacity = capacity;
 
-            Clear();
-        }
-
-        public void Clear()
-        {
             _buffer = new T[Capacity];
             _firstElement = -1;
             _lastElement = -1;

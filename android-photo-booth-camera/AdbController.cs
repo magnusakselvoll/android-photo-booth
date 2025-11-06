@@ -19,7 +19,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
         public string AdbBinariesFolder { get; }
         private string AdbExePath => Path.Combine(AdbBinariesFolder, "adb.exe");
 
-        public bool Validate(out string message)
+        public bool Validate(out string? message)
         {
             if (!File.Exists(AdbExePath))
             {
@@ -33,7 +33,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
             return true;
         }
 
-        public async Task<(bool connected, AndroidDevice device, string errorMessage)> TryConnectToDeviceAsync()
+        public async Task<(bool connected, AndroidDevice? device, string? errorMessage)> TryConnectToDeviceAsync()
         {
             var sw = Stopwatch.StartNew();
 
@@ -45,7 +45,7 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
                     if (!device.Authorized)
                     {
                         var unauthorizedMessage =
-                            $"Device {device.Id} not authorized. Please enable usb debugging and whitelist computer from the device.";
+                            $"Device {device.Id ?? "unknown"} not authorized. Please enable usb debugging and whitelist computer from the device.";
 
                         Logger.Log(LogMessageLevel.Debug, unauthorizedMessage, sw.Elapsed);
 

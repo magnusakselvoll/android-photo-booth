@@ -4,17 +4,14 @@ namespace MagnusAkselvoll.AndroidPhotoBooth.Camera
 {
     internal sealed class AndroidDevice
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         public bool Authorized { get; set; }
-        public string Product { get; set; }
-        public string Model { get; set; }
-        public string Device { get; set; }
-        public string Transport { get; set; }
+        public string? Product { get; set; }
+        public string? Model { get; set; }
+        public string? Device { get; set; }
+        public string? Transport { get; set; }
 
-        public override string ToString()
-        {
-            return $"{Id} - {Product} - {Model}";
-        }
+        public override string ToString() => $"{Id} - {Product} - {Model}";
 
         /*
 List of devices attached
@@ -40,7 +37,7 @@ XXXXXXXXX              device product:blueline model:Pixel_3 device:blueline tra
         public static Regex AuthorizedRegex { get; } = new Regex(
             @"^\s*(?'Id'\S+)\s+device\s+product:(?'Product'\S+)\s+model:(?'Model'\S+)\s+device:(?'Device'\S+)\s+transport_id:(?'Transport'\S+)", RegexOptions.IgnoreCase);
 
-        public static bool TryParse(string line, out AndroidDevice device)
+        public static bool TryParse(string line, out AndroidDevice? device)
         {
             if (TryParseUnauthorized(line, out device))
             {
@@ -55,7 +52,7 @@ XXXXXXXXX              device product:blueline model:Pixel_3 device:blueline tra
             return false;
         }
 
-        private static bool TryParseAuthorized(string line, out AndroidDevice device)
+        private static bool TryParseAuthorized(string line, out AndroidDevice? device)
         {
             var match = AuthorizedRegex.Match(line);
             if (match.Success)
@@ -76,7 +73,7 @@ XXXXXXXXX              device product:blueline model:Pixel_3 device:blueline tra
             return false;
         }
 
-        private static bool TryParseUnauthorized(string line, out AndroidDevice device)
+        private static bool TryParseUnauthorized(string line, out AndroidDevice? device)
         {
             var match = UnauthorizedRegex.Match(line);
             if (match.Success)
