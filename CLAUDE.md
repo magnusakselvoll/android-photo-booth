@@ -34,6 +34,32 @@ This document outlines the approach and instructions for the ongoing refactor of
 - **Comments for "why"** not "what": Explain non-obvious logic or business decisions
 - **No commented-out code**: Delete or handle with version control
 
+### Modern C# Language Features & Constructs
+- **Always use latest C# language features** available in .NET 10
+- **Prefer Microsoft first-party libraries and frameworks** (e.g., built-in DI, Configuration, Logging)
+- **Solution-based NuGet versioning**: Use `.csproj` properties for centralized version management
+- **Use target-typed `new` expressions**: `SomeObject o = new();` ✅
+- **Use primary constructors** (C# 12) where appropriate: `public class MyService(ILogger logger) { }`
+- **Use records for data transfer objects** when appropriate
+- **Use file-scoped namespaces**: `namespace X.Y.Z;`
+- **Use top-level statements** in Program.cs where possible
+
+### Type Visibility Requirements
+- **CRITICAL**: Always write types explicitly on the same line
+- ✅ **Explicit type examples**:
+  ```csharp
+  SomeObject o = new();                    // Type visible
+  var o = new SomeObject();                // Type visible
+  IService service = new ServiceImpl();     // Type visible (interface)
+  var options = new DataOptions();         // Type visible (new keyword)
+  ```
+- ❌ **Avoid**:
+  ```csharp
+  var o = GetObject();                     // Type NOT visible on line
+  var result = SomeMethodThatReturnsX();   // Type NOT visible on line
+  ```
+- **Rationale**: Readability and type clarity. When someone reads code, they should immediately know what type they're working with without hovering/navigating
+
 ### File Organization
 - **One class per file** (with rare exceptions for tiny helper classes)
 - **File name matches class name** exactly (case-sensitive on non-Windows)
